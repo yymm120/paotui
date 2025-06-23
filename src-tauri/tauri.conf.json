@@ -1,4 +1,5 @@
 {
+  "$schema": "../node_modules/@tauri-apps/cli/schema.json",
   "productName": "Paotui Delivery",
   "version": "1.0.0",
   "identifier": "com.paotui.delivery",
@@ -26,6 +27,7 @@
     "active": true,
     "category": "Business",
     "copyright": "© 2024 Paotui Team",
+    "createUpdaterArtifacts": false,
     "deb": {
       "depends": []
     },
@@ -45,5 +47,22 @@
       "timestampUrl": ""
     }
   },
-  "plugins": {}
+  "plugins": {
+    "shell": {
+      "scope": [
+        {
+          "name": "open",
+          "cmd": "open",
+          "args": true
+        }
+      ]
+    },
+    "fs": {
+      "scope": [
+        {
+          "allow": ["$DOWNLOAD/*", "$DOCUMENT/*"]
+        }
+      ]
+    }
+  }
 }
