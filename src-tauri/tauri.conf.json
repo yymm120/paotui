@@ -28,9 +28,6 @@
     "category": "Business",
     "copyright": "© 2024 Paotui Team",
     "createUpdaterArtifacts": false,
-    "deb": {
-      "depends": []
-    },
     "externalBin": [],
     "icon": [],
     "longDescription": "Professional delivery service mobile application for couriers and delivery drivers.",
