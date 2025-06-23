@@ -1,5 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 
+// Import BaseDirectory for file operations
+let BaseDirectory: any = null;
+
 // Conditional imports for Tauri (only when available)
 let invoke: any = null;
 let isPermissionGranted: any = null;
@@ -29,11 +32,13 @@ if (isTauriEnvironment) {
       getCurrentPosition = module.getCurrentPosition;
       watchPosition = module.watchPosition;
     });
-    import("@tauri-apps/plugin-camera").then((module) => {
-      takePicture = module.takePicture;
-    });
+    // Camera plugin - add when available
+    // import("@tauri-apps/plugin-camera").then((module) => {
+    //   takePicture = module.takePicture;
+    // });
     import("@tauri-apps/plugin-fs").then((module) => {
       writeTextFile = module.writeTextFile;
+      BaseDirectory = module.BaseDirectory;
     });
   } catch (error) {
     console.warn("Tauri APIs not available:", error);
@@ -254,6 +259,15 @@ export function useTauriMobile() {
   // Take delivery photo
   const takeDeliveryPhoto = useCallback(async (orderId: string) => {
     try {
+      if (!takePicture) {
+        console.log("📷 Camera functionality not available in current Tauri setup");
+        await sendMobileNotification(
+          "相机功能不可用",
+          "当前环境下相机功能不可用",
+        );
+        return null;
+      }
+
       const photo = await takePicture({
         quality: 80,
         allowEdit: true,
@@ -362,7 +376,7 @@ export function useTauriMobile() {
       const fileName = `paotui_backup_${new Date().toISOString().split("T")[0]}.json`;
 
       await writeTextFile(fileName, jsonData, {
-        baseDir: BaseDirectory.Download,
+        baseDir: BaseDirectory?.Download || "Download",
       });
 
       await sendMobileNotification(
