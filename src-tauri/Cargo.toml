@@ -1,0 +1,15 @@
+[package]
+name = "paotui"
+version = "0.0.0"
+description = "A simple Rust app"
+authors = ["you"]
+license = ""
+repository = ""
+edition = "2021"
+
+[build-dependencies]
+tauri-build = { version = "1.5", features = [] }
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+tauri = { version = "1.5", features = ["notification-all", "shell-open"] }
