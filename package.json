@@ -7,8 +7,13 @@
   "scripts": {
     "dev": "vite",
     "dev:tauri": "pnpm exec tauri dev",
+    "dev:android": "pnpm exec tauri android dev",
     "build": "tsc -b && vite build",
     "build:tauri": "pnpm exec tauri build",
+    "build:android": "pnpm exec tauri android build",
+    "build:android:debug": "pnpm exec tauri android build --debug",
+    "build:android:release": "pnpm exec tauri android build --release",
+    "android:init": "pnpm exec tauri android init",
     "tauri": "pnpm exec tauri",
     "install:tauri": "pnpm add -D @tauri-apps/cli@^1.6.0",
     "lint": "eslint .",

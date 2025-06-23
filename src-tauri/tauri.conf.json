@@ -29,7 +29,7 @@
     "copyright": "© 2024 Paotui Team",
     "createUpdaterArtifacts": false,
     "externalBin": [],
-    "icon": [],
+    "icon": ["icons/icon.ico"],
     "longDescription": "Professional delivery service mobile application for couriers and delivery drivers.",
     "macOS": {
       "frameworks": [],
@@ -42,6 +42,12 @@
       "certificateThumbprint": null,
       "digestAlgorithm": "sha256",
       "timestampUrl": ""
+    },
+    "android": {
+      "minSdkVersion": 24,
+      "compileSdkVersion": 34,
+      "targetSdkVersion": 34,
+      "versionCode": 1
     }
   },
   "plugins": {
@@ -49,7 +55,17 @@
       "open": true
     },
     "fs": {
-      "requireLiteralLeadingDot": false
+      "requireLiteralLeadingDot": false,
+      "scope": {
+        "allow": ["$DOWNLOAD/*", "$DOCUMENT/*", "$PICTURE/*"],
+        "deny": ["$HOME/.ssh/*"]
+      }
+    },
+    "notification": {
+      "default": ["allow-is-permission-granted", "allow-request-permission", "allow-notify"]
+    },
+    "geolocation": {
+      "default": ["allow-get-current-position", "allow-watch-position", "allow-clear-watch"]
     }
   }
 }
