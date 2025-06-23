@@ -58,12 +58,6 @@
         "allow": ["$DOWNLOAD/*", "$DOCUMENT/*", "$PICTURE/*"],
         "deny": ["$HOME/.ssh/*"]
       }
-    },
-    "notification": {
-      "default": ["allow-is-permission-granted", "allow-request-permission", "allow-notify"]
-    },
-    "geolocation": {
-      "default": ["allow-get-current-position", "allow-watch-position", "allow-clear-watch"]
     }
   }
 }
