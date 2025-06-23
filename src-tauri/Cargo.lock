@@ -2446,6 +2446,7 @@ name = "paotui"
 version = "0.0.0"
 dependencies = [
  "serde",
+ "serde_json",
  "tauri",
  "tauri-build",
  "tauri-plugin-fs",
