@@ -7,6 +7,9 @@ license = ""
 repository = ""
 edition = "2021"
 
+[package.metadata.tauri.bundle]
+identifier = "com.paotui.delivery"
+
 [build-dependencies]
 tauri-build = { version = "2.2.0", features = [] }
 
