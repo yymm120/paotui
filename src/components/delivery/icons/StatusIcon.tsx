@@ -1,4 +1,4 @@
-import * as React from "react";
+
 
 interface StatusIconProps {
   className?: string;

@@ -10,6 +10,17 @@ edition = "2021"
 [package.metadata.tauri.bundle]
 identifier = "com.paotui.delivery"
 
+# The binary target for desktop builds
+[[bin]]
+name = "paotui"
+path = "src/main.rs"
+
+# The library target for mobile builds  
+[lib]
+name = "paotui_lib"
+path = "src/lib.rs"
+crate-type = ["lib", "cdylib", "staticlib"]
+
 [build-dependencies]
 tauri-build = { version = "2.2.0", features = [] }
 

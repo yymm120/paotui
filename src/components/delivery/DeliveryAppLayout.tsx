@@ -1,4 +1,3 @@
-import * as React from "react";
 import { cn } from "@/lib/utils";
 import { DeliveryAppHeader } from "./DeliveryAppHeader";
 import { NavigationTabs } from "./NavigationTabs";
@@ -38,6 +37,10 @@ const mockOrders: DeliveryOrder[] = [
     items: "货品：食品小吃·2公斤·2件",
     notes: "备注：other-#其他",
     buttonText: "接单",
+    status: "new",
+    priority: "medium",
+    estimatedEarnings: 8.5,
+    orderTime: new Date().toISOString(),
   },
   {
     id: "2",
@@ -52,6 +55,10 @@ const mockOrders: DeliveryOrder[] = [
     items: "货品：食品小吃·2公斤·2件",
     notes: "备注：other-#其他",
     buttonText: "接单",
+    status: "new",
+    priority: "medium",
+    estimatedEarnings: 8.5,
+    orderTime: new Date().toISOString(),
   },
 ];
 

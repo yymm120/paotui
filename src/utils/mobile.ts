@@ -255,7 +255,7 @@ export function handleAppResume(): void {
 // Battery optimization
 export function isBatteryOptimizationEnabled(): boolean {
   // Check if battery optimization might affect location tracking
-  return navigator.getBattery !== undefined;
+  return (navigator as any).getBattery !== undefined;
 }
 
 export async function getBatteryLevel(): Promise<number> {

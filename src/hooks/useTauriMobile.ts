@@ -125,7 +125,7 @@ export function useTauriMobile() {
   const loadOrders = useCallback(async () => {
     if (!invoke) return;
     try {
-      const ordersData = await invoke<TauriDeliveryOrder[]>("get_orders");
+      const ordersData = await invoke("get_orders") as TauriDeliveryOrder[];
       setOrders(ordersData);
     } catch (error) {
       console.error("Failed to load orders:", error);
@@ -168,7 +168,7 @@ export function useTauriMobile() {
   // Toggle work status
   const toggleWorkStatus = useCallback(async () => {
     try {
-      const newStatus = await invoke<boolean>("toggle_work_status");
+      const newStatus = await invoke("toggle_work_status") as boolean;
       setIsWorking(newStatus);
 
       if (newStatus) {
@@ -218,7 +218,7 @@ export function useTauriMobile() {
       // Watch position changes
       const unwatch = await watchPosition(
         { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 },
-        (position) => {
+        (position: any) => {
           const locationData: LocationData = {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
@@ -234,7 +234,7 @@ export function useTauriMobile() {
             accuracy: locationData.accuracy,
           });
         },
-        (error) => {
+        (error: any) => {
           console.error("Location watch error:", error);
         },
       );
@@ -275,7 +275,7 @@ export function useTauriMobile() {
       });
 
       if (photo) {
-        const savedPath = await invoke<string>("save_delivery_photo", {
+        const savedPath = await invoke("save_delivery_photo", {
           orderId,
           photoPath: photo.webPath || photo.path,
         });
@@ -328,7 +328,7 @@ export function useTauriMobile() {
   const calculateDistance = useCallback(
     async (fromLat: number, fromLng: number, toLat: number, toLng: number) => {
       try {
-        const distance = await invoke<number>("calculate_route_distance", {
+        const distance = await invoke("calculate_route_distance", {
           fromLat,
           fromLng,
           toLat,
@@ -346,7 +346,7 @@ export function useTauriMobile() {
   // Load settings
   const loadSettings = useCallback(async () => {
     try {
-      const settingsData = await invoke<DeliverySettings>("get_settings");
+      const settingsData = await invoke("get_settings") as DeliverySettings;
       setSettings(settingsData);
     } catch (error) {
       console.error("Failed to load settings:", error);
@@ -394,7 +394,7 @@ export function useTauriMobile() {
     loadSettings();
 
     // Get initial work status
-    invoke<boolean>("get_work_status").then(setIsWorking);
+    invoke("get_work_status").then((result: any) => setIsWorking(result as boolean));
 
     // Get initial location
     getCurrentLocationData();

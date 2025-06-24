@@ -1,4 +1,4 @@
-import * as React from "react";
+
 import { cn } from "@/lib/utils";
 import { DeliveryCard } from "./DeliveryCard";
 import { type DeliveryOrder } from "../../types/delivery";

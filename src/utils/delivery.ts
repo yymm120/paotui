@@ -1,4 +1,4 @@
-import { DeliveryOrder } from "../types/delivery";
+import { type DeliveryOrder } from "../types/delivery";
 
 export function filterOrdersByStatus(
   orders: DeliveryOrder[],

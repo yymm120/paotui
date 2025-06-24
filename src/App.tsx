@@ -1,4 +1,5 @@
-import React from "react";
+
+import { useState, useCallback, useEffect } from "react";
 import { DeliveryAppLayout } from "./components/delivery";
 import { DemoControls } from "./components/DemoControls";
 import { CameraComponent } from "./components/mobile/CameraComponent";
@@ -11,10 +12,10 @@ import { mockOrders } from "./data/mockOrders";
 import "./App.css";
 
 function App() {
-  const [showDemoControls, setShowDemoControls] = React.useState(false);
-  const [showMobileFeatures, setShowMobileFeatures] = React.useState(false);
-  const [showSettings, setShowSettings] = React.useState(false);
-  const [selectedOrderForPhoto, setSelectedOrderForPhoto] = React.useState<
+  const [showDemoControls, setShowDemoControls] = useState(false);
+  const [showMobileFeatures, setShowMobileFeatures] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [selectedOrderForPhoto, setSelectedOrderForPhoto] = useState<
     string | null
   >(null);
 
@@ -39,17 +40,17 @@ function App() {
   const sendMobileNotification = mobileApp?.sendMobileNotification || null;
 
   // Mobile-specific handlers
-  const handleMenuClick = React.useCallback(() => {
+  const handleMenuClick = useCallback(() => {
     setShowMobileFeatures(!showMobileFeatures);
     console.log("Menu clicked - toggling mobile features panel");
   }, [showMobileFeatures]);
 
-  const handleSettingsClick = React.useCallback(() => {
+  const handleSettingsClick = useCallback(() => {
     setShowSettings(!showSettings);
     console.log("Settings clicked");
   }, [showSettings]);
 
-  const handleNotificationClick = React.useCallback(async () => {
+  const handleNotificationClick = useCallback(async () => {
     if (isMobileApp && sendMobileNotification) {
       try {
         await sendMobileNotification("通知测试", "这是一个测试通知");
@@ -61,7 +62,7 @@ function App() {
     webApp.handleNotificationClick();
   }, [isMobileApp, sendMobileNotification, webApp.handleNotificationClick]);
 
-  const handleAcceptOrderWrapper = React.useCallback(
+  const handleAcceptOrderWrapper = useCallback(
     async (orderId: string) => {
       // Use the working web app function
       acceptOrder(orderId);
@@ -82,7 +83,7 @@ function App() {
     [acceptOrder, isMobileApp, sendMobileNotification],
   );
 
-  const handleToggleWorkWrapper = React.useCallback(async () => {
+  const handleToggleWorkWrapper = useCallback(async () => {
     // Use the working web app function
     toggleWork();
 
@@ -100,7 +101,7 @@ function App() {
   }, [toggleWork, isWorking, isMobileApp, sendMobileNotification]);
 
   // Demo control handlers (for web version)
-  const handleAddRandomOrder = React.useCallback(() => {
+  const handleAddRandomOrder = useCallback(() => {
     const randomOrder =
       mockOrders[Math.floor(Math.random() * mockOrders.length)];
     const newOrder = {
@@ -115,7 +116,7 @@ function App() {
     console.log("✅ Added random order:", newOrder.fromStore);
   }, [webApp]);
 
-  const handleSimulateNotification = React.useCallback(async () => {
+  const handleSimulateNotification = useCallback(async () => {
     if (isMobileApp && sendMobileNotification) {
       try {
         await sendMobileNotification("测试通知", "这是一个移��端测试通知");
@@ -127,13 +128,13 @@ function App() {
     }
   }, [isMobileApp, sendMobileNotification]);
 
-  const handleResetData = React.useCallback(() => {
+  const handleResetData = useCallback(() => {
     console.log("🔄 Data reset - refresh page to see original data");
     window.location.reload();
   }, []);
 
   // Show order counts in console for debugging
-  React.useEffect(() => {
+  useEffect(() => {
     console.log("📱 Platform:", isMobileApp ? "Tauri Mobile" : "Web Browser");
     console.log("👷 Working Status:", isWorking ? "Working" : "Not Working");
     console.log("📦 Orders in current tab:", orders.length);
@@ -147,7 +148,7 @@ function App() {
   }, [isMobileApp, isWorking, orders.length, currentLocation]);
 
   // Welcome message
-  React.useEffect(() => {
+  useEffect(() => {
     console.log("🚚 Welcome to the Paotui Delivery Mobile App!");
     console.log("💡 Platform:", isMobileApp ? "Tauri Mobile" : "Web Browser");
     if (isMobileApp) {

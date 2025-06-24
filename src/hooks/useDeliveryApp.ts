@@ -1,8 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import {
-  DeliveryAppState,
-  DeliveryOrder,
-  Notification,
+  type DeliveryAppState,
+  type DeliveryOrder,
 } from "../types/delivery";
 import { mockOrders, mockNotifications } from "../data/mockOrders";
 import {
@@ -115,12 +114,6 @@ export function useDeliveryApp() {
       const currentIndex = filters.indexOf(prev.filterType);
       const nextIndex = (currentIndex + 1) % filters.length;
 
-      const filterLabels = {
-        comprehensive: "综合排序",
-        distance: "距离优先",
-        earnings: "收益优先",
-        time: "时间优先",
-      };
 
       return {
         ...prev,

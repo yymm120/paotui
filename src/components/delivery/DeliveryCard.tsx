@@ -1,4 +1,3 @@
-import * as React from "react";
 import { cn } from "@/lib/utils";
 import {
   Card,
@@ -8,7 +7,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { DistanceIndicator } from "./DistanceIndicator";
-import { DeliveryOrder } from "../../types/delivery";
+import { type DeliveryOrder } from "../../types/delivery";
 
 interface DeliveryCardProps {
   order: DeliveryOrder;
