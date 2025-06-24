@@ -5,23 +5,8 @@ import { FilterSection } from "./FilterSection";
 import { DeliveryCardList } from "./DeliveryCardList";
 import { BottomFooter } from "./BottomFooter";
 import { type DeliveryOrder } from "../../types/delivery";
+import type { DeliveryAppLayoutProps } from "../../types/components";
 
-interface DeliveryAppLayoutProps {
-  className?: string;
-  orders?: DeliveryOrder[];
-  activeTab?: string;
-  isWorking?: boolean;
-  status?: string;
-  filterLabel?: string;
-  onMenuClick?: () => void;
-  onStatusClick?: () => void;
-  onNotificationClick?: () => void;
-  onTabChange?: (tab: string) => void;
-  onFilterClick?: () => void;
-  onAcceptOrder?: (orderId: string) => void;
-  onToggleWork?: () => void;
-  onSettingsClick?: () => void;
-}
 
 const mockOrders: DeliveryOrder[] = [
   {

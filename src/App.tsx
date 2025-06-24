@@ -21,7 +21,7 @@ function App() {
 
   // Check if running in mobile environment (Tauri)
   const isMobileApp =
-    typeof window !== "undefined" && (window as any).__TAURI__ !== undefined;
+    typeof window !== "undefined" && (window as import('./types/tauri').TauriWindow).__TAURI__ !== undefined;
 
   // Use web hooks as primary (they work and are tested)
   const webApp = useDeliveryApp();

@@ -7,11 +7,11 @@ export interface DeliveryOrder {
   toAddress: string;
   fromDistance: string;
   toDistance: string;
-  tag?: string;
+  tag?: string | undefined;
   items: string;
-  notes?: string;
+  notes?: string | undefined;
   buttonText: string;
-  buttonColor?: string;
+  buttonColor?: string | undefined;
   status: "new" | "pickup" | "delivery" | "completed";
   priority: "high" | "medium" | "low";
   estimatedEarnings: number;
@@ -22,7 +22,7 @@ export interface DeliveryAppState {
   activeTab: "new-tasks" | "pickup" | "delivery";
   isWorking: boolean;
   userStatus: string;
-  filterType: "comprehensive" | "distance" | "earnings" | "time";
+  filterType: "comprehensive" | "distance" | "earnings" | "time" | undefined;
   orders: DeliveryOrder[];
   acceptedOrders: string[];
   notifications: Notification[];

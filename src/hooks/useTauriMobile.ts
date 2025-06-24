@@ -1,21 +1,36 @@
 import { useState, useEffect, useCallback } from "react";
 
+import type {
+  TauriInvokeFunction,
+  TauriPermissionGranted,
+  TauriPermissionRequest,
+  TauriSendNotification,
+  TauriGeolocation,
+  TauriCamera,
+  TauriFileSystem,
+  TauriBaseDirectory,
+  TauriDeliveryOrder,
+  LocationData,
+  DeliverySettings,
+} from '../types/tauri';
+import type { UseTauriMobileReturn } from '../types/hooks';
+
 // Import BaseDirectory for file operations
-let BaseDirectory: any = null;
+let BaseDirectory: TauriBaseDirectory | null = null;
 
 // Conditional imports for Tauri (only when available)
-let invoke: any = null;
-let isPermissionGranted: any = null;
-let requestPermission: any = null;
-let sendNotification: any = null;
-let getCurrentPosition: any = null;
-let watchPosition: any = null;
-let takePicture: any = null;
-let writeTextFile: any = null;
+let invoke: TauriInvokeFunction | null = null;
+let isPermissionGranted: (() => Promise<boolean>) | null = null;
+let requestPermission: (() => Promise<'granted' | 'denied' | 'default'>) | null = null;
+let sendNotification: ((options: { title: string; body: string; icon?: string }) => Promise<void>) | null = null;
+let getCurrentPosition: (() => Promise<import('../types/tauri').TauriPosition>) | null = null;
+let watchPosition: TauriGeolocation['watchPosition'] | null = null;
+let takePicture: TauriCamera['takePicture'] | null = null;
+let writeTextFile: TauriFileSystem['writeTextFile'] | null = null;
 
 // Check if running in Tauri environment
 const isTauriEnvironment =
-  typeof window !== "undefined" && (window as any).__TAURI__ !== undefined;
+  typeof window !== "undefined" && (window as import('../types/tauri').TauriWindow).__TAURI__ !== undefined;
 
 if (isTauriEnvironment) {
   try {
@@ -45,43 +60,8 @@ if (isTauriEnvironment) {
   }
 }
 
-export interface TauriDeliveryOrder {
-  id: string;
-  delivery_time: string;
-  rating: string;
-  from_store: string;
-  from_address: string;
-  to_address: string;
-  from_distance: string;
-  to_distance: string;
-  tag?: string;
-  items: string;
-  notes?: string;
-  button_text: string;
-  status: "New" | "Pickup" | "Delivery" | "Completed";
-  priority: "High" | "Medium" | "Low";
-  estimated_earnings: number;
-  order_time: string;
-  created_at: string;
-}
 
-export interface LocationData {
-  latitude: number;
-  longitude: number;
-  accuracy: number;
-  timestamp: string;
-}
-
-export interface DeliverySettings {
-  auto_accept_orders: boolean;
-  min_order_value: number;
-  max_delivery_distance: number;
-  sound_notifications: boolean;
-  working_hours_start: string;
-  working_hours_end: string;
-}
-
-export function useTauriMobile() {
+export function useTauriMobile(): UseTauriMobileReturn {
   const [orders, setOrders] = useState<TauriDeliveryOrder[]>([]);
   const [currentLocation, setCurrentLocation] = useState<LocationData | null>(
     null,
@@ -125,7 +105,7 @@ export function useTauriMobile() {
   const loadOrders = useCallback(async () => {
     if (!invoke) return;
     try {
-      const ordersData = await invoke("get_orders") as TauriDeliveryOrder[];
+      const ordersData = await invoke<TauriDeliveryOrder[]>("get_orders");
       setOrders(ordersData);
     } catch (error) {
       console.error("Failed to load orders:", error);
@@ -166,9 +146,10 @@ export function useTauriMobile() {
   );
 
   // Toggle work status
-  const toggleWorkStatus = useCallback(async () => {
+  const toggleWorkStatus = useCallback(async (): Promise<boolean> => {
+    if (!invoke) return false;
     try {
-      const newStatus = await invoke("toggle_work_status") as boolean;
+      const newStatus = await invoke<boolean>("toggle_work_status");
       setIsWorking(newStatus);
 
       if (newStatus) {
@@ -178,8 +159,10 @@ export function useTauriMobile() {
         await sendMobileNotification("结束工作", "您已停止接收新订单");
         stopLocationTracking();
       }
+      return newStatus;
     } catch (error) {
       console.error("Failed to toggle work status:", error);
+      return false;
     }
   }, []);
 
@@ -218,7 +201,7 @@ export function useTauriMobile() {
       // Watch position changes
       const unwatch = await watchPosition(
         { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 },
-        (position: any) => {
+        (position: import('../types/tauri').TauriPosition) => {
           const locationData: LocationData = {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
@@ -234,13 +217,13 @@ export function useTauriMobile() {
             accuracy: locationData.accuracy,
           });
         },
-        (error: any) => {
+        (error: import('../types/tauri').TauriPositionError) => {
           console.error("Location watch error:", error);
         },
       );
 
       // Store unwatch function for cleanup
-      (window as any).locationUnwatch = unwatch;
+      window.locationUnwatch = unwatch;
     } catch (error) {
       console.error("Failed to start location tracking:", error);
       setIsLocationWatching(false);
@@ -249,9 +232,9 @@ export function useTauriMobile() {
 
   // Stop location tracking
   const stopLocationTracking = useCallback(() => {
-    if ((window as any).locationUnwatch) {
-      (window as any).locationUnwatch();
-      (window as any).locationUnwatch = null;
+    if (window.locationUnwatch) {
+      window.locationUnwatch();
+      window.locationUnwatch = null;
     }
     setIsLocationWatching(false);
   }, []);
@@ -346,7 +329,7 @@ export function useTauriMobile() {
   // Load settings
   const loadSettings = useCallback(async () => {
     try {
-      const settingsData = await invoke("get_settings") as DeliverySettings;
+      const settingsData = await invoke<DeliverySettings>("get_settings");
       setSettings(settingsData);
     } catch (error) {
       console.error("Failed to load settings:", error);
@@ -394,7 +377,7 @@ export function useTauriMobile() {
     loadSettings();
 
     // Get initial work status
-    invoke("get_work_status").then((result: any) => setIsWorking(result as boolean));
+    invoke<boolean>("get_work_status").then((result) => setIsWorking(result));
 
     // Get initial location
     getCurrentLocationData();

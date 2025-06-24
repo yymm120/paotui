@@ -3,6 +3,7 @@ import {
   type DeliveryAppState,
   type DeliveryOrder,
 } from "../types/delivery";
+import type { UseDeliveryAppReturn } from "../types/hooks";
 import { mockOrders, mockNotifications } from "../data/mockOrders";
 import {
   filterOrdersByStatus,
@@ -17,13 +18,13 @@ const initialState: DeliveryAppState = {
   activeTab: "new-tasks",
   isWorking: false,
   userStatus: "已收工",
-  filterType: "comprehensive",
+  filterType: "comprehensive" as const,
   orders: mockOrders,
   acceptedOrders: [],
   notifications: mockNotifications,
 };
 
-export function useDeliveryApp() {
+export function useDeliveryApp(): UseDeliveryAppReturn {
   const [state, setState] = useState<DeliveryAppState>(initialState);
 
   // Get filtered and sorted orders based on current tab and filter

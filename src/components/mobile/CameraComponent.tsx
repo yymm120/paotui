@@ -3,12 +3,7 @@ import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { useTauriMobile } from "../../hooks/useTauriMobile";
 import { cn } from "@/lib/utils";
-
-interface CameraComponentProps {
-  orderId: string;
-  onPhotoTaken?: (photoPath: string) => void;
-  className?: string;
-}
+import type { CameraComponentProps } from "../../types/components";
 
 export function CameraComponent({
   orderId,
@@ -25,7 +20,9 @@ export function CameraComponent({
       const savedPath = await takeDeliveryPhoto(orderId);
       if (savedPath) {
         setPhotoPath(savedPath);
-        onPhotoTaken?.(savedPath);
+        if (onPhotoTaken) {
+          onPhotoTaken(savedPath);
+        }
         await sendMobileNotification(
           "送达照片已保存",
           "订单送达照片已成功保存到本地",
