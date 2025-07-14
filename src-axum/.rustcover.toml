@@ -1,0 +1,10 @@
+[build]
+rustflags = [
+    "--cfg=coverage",
+    "-Zinstrument-coverage"
+]
+
+#[source]
+#std = { path = "~/.rustup/toolchains/stable-x86_64-pc-windows-msvc/lib/rustlib/src/rust" }
+#[source]
+#std = { path = "C:/Users/12084/.rustup/toolchains/1.87.0-x86_64-pc-windows-msvc/lib/rustlib/src/rust" }

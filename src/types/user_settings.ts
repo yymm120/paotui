@@ -1,10 +1,14 @@
 export interface DeliveryOrder {
   id: string;
   deliveryTime: string;
-  rating: string;
-  fromStore: string;
-  fromAddress: string;
-  toAddress: string;
+  // 送达时间
+  deliveryTime_ArrivedTime: Date;
+  // 剩余时间
+  deliveryTime_RemainingTime: number;
+
+  address_FromStore: string;
+  address_fromCurrent: string;
+  address_to: string;
   fromDistance: string;
   toDistance: string;
   tag?: string;

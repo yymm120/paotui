@@ -1,0 +1,6 @@
+name: src-axum  # 环境名称
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12  # 指定 Python 版本
