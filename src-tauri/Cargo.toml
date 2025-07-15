@@ -1,6 +1,6 @@
 [package]
-name = "paotui"
-version = "0.0.0"
+name = "src-tauri"
+version = "0.1.0"
 description = "A simple Rust app"
 authors = ["you"]
 license = ""
@@ -28,7 +28,19 @@ tauri-build = { version = "2.2.0", features = [] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 tauri = { version = "2.2.0", features = [] }
-tauri-plugin-notification = "2.2.3"
+tauri-plugin-notification = "2"
 tauri-plugin-fs = "2.3.0"
 tauri-plugin-geolocation = "2.2.5"
 tauri-plugin-shell = "2.2.2"
+tauri-plugin-websocket = "2"
+
+tauri-plugin-http = { version = "2", features = ["json"] }
+tauri-plugin-store = "2"
+tauri-plugin-sql = { version = "2", features = ["sqlite"] }
+tauri-plugin-log = "2"
+log = "0.4.27"
+anyhow = "1.0.98"
+thiserror = "2.0.12"
+itertools = "0.14.0"
+
+[dev-dependencies]

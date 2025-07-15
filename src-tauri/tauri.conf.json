@@ -1,12 +1,12 @@
 {
-  "$schema": "../node_modules/@tauri-apps/cli/schema.json",
+  "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "Paotui Delivery",
   "version": "1.0.0",
   "identifier": "com.paotui.delivery",
   "build": {
     "beforeDevCommand": "pnpm run dev",
     "beforeBuildCommand": "pnpm run build",
-    "devUrl": "http://localhost:5173",
+    "devUrl": "http://127.0.0.1:5173",
     "frontendDist": "../dist"
   },
   "app": {
@@ -44,8 +44,8 @@
       "timestampUrl": ""
     },
     "android": {
-      "minSdkVersion": 28,
-      "versionCode": 100
+      "minSdkVersion": 21,
+      "versionCode": 1
 
     }
   },

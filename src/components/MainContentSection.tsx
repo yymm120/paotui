@@ -8,7 +8,7 @@ const orderData = [
         id: 1,
         deliveryTime: "30分钟内",
         deliveryDeadline: "(19:45前)送达",
-        rating: "4.8",
+        estimatedEarnings: "4.8",
         distance1: "300",
         distance2: "300",
         storeName: "蜜雪冰城-德润城店",
@@ -22,7 +22,7 @@ const orderData = [
         id: 2,
         deliveryTime: "30分钟内",
         deliveryDeadline: "(19:45前)送达",
-        rating: "4.8",
+        estimatedEarnings: "4.8",
         distance1: "300",
         distance2: "300",
         storeName: "蜜雪冰城-德润城店",
@@ -49,7 +49,7 @@ export default function MainContentSection() {
                                 <span className="text-black">{order.deliveryDeadline}</span>
                             </div>
                             <div className="w-[51px] h-[21px] [font-family:'Inter-SemiBold',Helvetica] font-semibold text-black text-base text-center tracking-[0] leading-[normal]">
-                                {order.rating}
+                                {order.estimatedEarnings}
                             </div>
                         </div>
 

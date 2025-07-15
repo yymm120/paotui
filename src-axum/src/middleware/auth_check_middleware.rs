@@ -45,13 +45,18 @@ pub async fn auth_check(
   let db = app_state.db;
   let header_token = get_token_from_header(&header_map).unwrap_or("").to_string();
   let profile = create_profile_by_auth_token(header_token.clone(), &db).await;
-  let profile_token = profile.token.clone();
+  let profile_arc = Arc::new(Mutex::new(profile));
 
-  request.extensions_mut().insert(Arc::new(Mutex::new(profile)));
+  request.extensions_mut().insert::<Arc<Mutex<Profile>>>(profile_arc.clone());
 
   let response = next.run(request).await;
   let mut response = response.into_response();
 
+  let profile_guard = profile_arc.lock().unwrap();
+  let user_type = profile_guard.user_type.clone();
+  println!("user_type: {}", user_type);
+
+  let profile_token = profile_guard.token.clone();
   // 安全设置新的Authorization头
   if profile_token != header_token.clone() {
     if let Ok(header_value) = HeaderValue::from_str(&format!("Bearer {}", &profile_token)) {

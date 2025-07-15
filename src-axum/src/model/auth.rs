@@ -129,8 +129,6 @@ impl Profile {
         token = generate_token(UserType::UnsignedUpUser, claims.clone()).unwrap_or("".to_string());
       }
     }
-
-
     Profile {
       user_type,
       user_id: claims.sub.clone(),
@@ -141,4 +139,5 @@ impl Profile {
       delivery_info: Default::default(),
     }
   }
+  // pub fn update_profile(profile: Profile) ->
 }

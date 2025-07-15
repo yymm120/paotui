@@ -20,8 +20,6 @@ pub async fn init(x: &Db, header_map: HeaderMap, profile: Arc<Mutex<Profile>>) -
   }
 
   let claims = claims_op.as_ref().unwrap();
-  println!("user_type: {}", user_type);
-  println!("claims: {:?}", claims);
 
   let res = match user_type {
     // 已登录用户

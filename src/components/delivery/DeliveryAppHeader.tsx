@@ -1,8 +1,11 @@
 import { cn } from "@/lib/utils";
-import { HamburgerIcon } from "./icons/HamburgerIcon";
+// import { HamburgerIcon } from "./icons/HamburgerIcon";
 import { StatusIcon } from "./icons/StatusIcon";
 import { NotificationIcon } from "./icons/NotificationIcon";
 import { ChevronDownIcon } from "./icons/ChevronDownIcon";
+// import {SheetTrigger} from "@/components/ui/sheet.tsx";
+// import {Button} from "@/components/ui/button.tsx";
+import {MobileSidebar} from "@/components/delivery/MobileSidebar.tsx";
 
 interface DeliveryAppHeaderProps {
   className?: string;
@@ -14,7 +17,7 @@ interface DeliveryAppHeaderProps {
 
 export function DeliveryAppHeader({
   className,
-  onMenuClick,
+  // onMenuClick,
   onStatusClick,
   onNotificationClick,
   status = "已收工",
@@ -29,17 +32,21 @@ export function DeliveryAppHeader({
       {/* Menu Bar */}
       <div className="flex h-12 w-full items-center gap-2 bg-black px-3 py-2 sm:h-[46px] sm:px-4">
         {/* Hamburger Menu Button */}
-        <button
-          onClick={onMenuClick}
-          className="flex h-10 w-10 items-center justify-center rounded-2xl border-[0.5px] border-neutral-600 bg-neutral-800 p-1 active:bg-neutral-700 sm:h-[30px] sm:w-[30px]"
-        >
-          <HamburgerIcon className="h-[17px] w-[17px] flex-shrink-0" />
-        </button>
+        {/*<button*/}
+        {/*  onClick={onMenuClick}*/}
+        {/*  className="flex h-[30px] w-[30px] items-center justify-center rounded-full border-[0.5px] border-neutral-600 bg-neutral-800 p-1 active:bg-neutral-700 sm:h-[30px] sm:w-[30px]"*/}
+        {/*>*/}
+        {/*  <HamburgerIcon className="h-[17px] w-[17px] flex-shrink-0" />*/}
+        {/*</button>*/}
+        <MobileSidebar />
+        {/*<SheetTrigger asChild>*/}
+        {/*  <Button variant="outline"><HamburgerIcon className="h-[17px] w-[17px] flex-shrink-0" /></Button>*/}
+        {/*</SheetTrigger>*/}
 
         {/* Status Indicator */}
         <button
           onClick={onStatusClick}
-          className="flex h-10 min-w-fit items-center justify-center gap-1 rounded-2xl border-[0.5px] border-neutral-400 px-3 py-2 active:bg-neutral-800 sm:h-[30px] sm:px-2 sm:py-1"
+          className="flex h-[30px] min-w-fit items-center justify-center gap-1 rounded-full border-[0.5px] border-neutral-400 px-2 py-0 active:bg-neutral-800 sm:h-[30px] sm:px-2 sm:py-1"
         >
           <StatusIcon className="h-4 w-4 flex-shrink-0" />
           <span className="text-sm font-bold text-white whitespace-nowrap">
@@ -54,7 +61,7 @@ export function DeliveryAppHeader({
         {/* Notification Button */}
         <button
           onClick={onNotificationClick}
-          className="flex h-10 w-10 items-center justify-center rounded-full active:bg-neutral-800 sm:h-[30px] sm:w-[30px]"
+          className="flex h-[30px] w-[30px] items-center justify-center rounded-full active:bg-neutral-800 sm:h-[30px] sm:w-[30px]"
         >
           <NotificationIcon className="h-7 w-7 sm:h-[30px] sm:w-[30px]" />
         </button>

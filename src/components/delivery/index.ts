@@ -15,11 +15,3 @@ export { HamburgerIcon } from "./icons/HamburgerIcon";
 export { StatusIcon } from "./icons/StatusIcon";
 export { NotificationIcon } from "./icons/NotificationIcon";
 export { ChevronDownIcon } from "./icons/ChevronDownIcon";
-
-// Types (re-export from types folder)
-export type {
-  DeliveryOrder,
-  DeliveryAppState,
-  Notification,
-  UserSettings,
-} from "../../types/delivery";

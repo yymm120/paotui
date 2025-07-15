@@ -1,4 +1,4 @@
-import { type DeliveryOrder } from "../types/delivery";
+import { type DeliveryOrder } from "@/types";
 
 export function filterOrdersByStatus(
   orders: DeliveryOrder[],
@@ -16,8 +16,8 @@ export function sortOrdersByPriority(orders: DeliveryOrder[]): DeliveryOrder[] {
 
 export function sortOrdersByDistance(orders: DeliveryOrder[]): DeliveryOrder[] {
   return [...orders].sort((a, b) => {
-    const totalDistanceA = parseInt(a.fromDistance) + parseInt(a.toDistance);
-    const totalDistanceB = parseInt(b.fromDistance) + parseInt(b.toDistance);
+    const totalDistanceA = parseInt(a.distance_current_to_store) + parseInt(a.distance_store_to_customer);
+    const totalDistanceB = parseInt(b.distance_current_to_store) + parseInt(b.distance_store_to_customer);
     return totalDistanceA - totalDistanceB;
   });
 }
@@ -28,7 +28,7 @@ export function sortOrdersByEarnings(orders: DeliveryOrder[]): DeliveryOrder[] {
 
 export function sortOrdersByTime(orders: DeliveryOrder[]): DeliveryOrder[] {
   return [...orders].sort((a, b) => {
-    return new Date(a.orderTime).getTime() - new Date(b.orderTime).getTime();
+    return a.time_order!.getTime() - b.time_order!.getTime();
   });
 }
 
@@ -45,7 +45,7 @@ export function formatEarnings(earnings: number): string {
 }
 
 export function calculateTotalDistance(order: DeliveryOrder): number {
-  return parseInt(order.fromDistance) + parseInt(order.toDistance);
+  return parseInt(order.distance_current_to_store) + parseInt(order.distance_store_to_customer);
 }
 
 export function getOrderStatusText(status: DeliveryOrder["status"]): string {

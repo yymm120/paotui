@@ -4,7 +4,8 @@ import { NavigationTabs } from "./NavigationTabs";
 import { FilterSection } from "./FilterSection";
 import { DeliveryCardList } from "./DeliveryCardList";
 import { BottomFooter } from "./BottomFooter";
-import { type DeliveryOrder } from "../../types/delivery";
+import type {DeliveryOrder} from "@/types";
+import {mockDeliveryOrders} from "@/data/mockDeliveryOrders.ts";
 
 interface DeliveryAppLayoutProps {
   className?: string;
@@ -23,48 +24,48 @@ interface DeliveryAppLayoutProps {
   onSettingsClick?: () => void;
 }
 
-const mockOrders: DeliveryOrder[] = [
-  {
-    id: "1",
-    deliveryTime: "30分钟内(19:45前)送达",
-    rating: "4.8",
-    fromStore: "蜜雪冰城-德润城店",
-    fromAddress: "义务大道337号",
-    toAddress: "重庆华府酒店(财富广场店)八楼802",
-    fromDistance: "300",
-    toDistance: "300",
-    tag: "新人体验单",
-    items: "货品：食品小吃·2公斤·2件",
-    notes: "备注：other-#其他",
-    buttonText: "接单",
-    status: "new",
-    priority: "medium",
-    estimatedEarnings: 8.5,
-    orderTime: new Date().toISOString(),
-  },
-  {
-    id: "2",
-    deliveryTime: "30分钟内(19:45前)送达",
-    rating: "4.8",
-    fromStore: "蜜雪冰城-德润城店",
-    fromAddress: "义务大道337号",
-    toAddress: "重庆华府酒店(财富广场店)八楼802",
-    fromDistance: "300",
-    toDistance: "300",
-    tag: "新人体验单",
-    items: "货品：食品小吃·2公斤·2件",
-    notes: "备注：other-#其他",
-    buttonText: "接单",
-    status: "new",
-    priority: "medium",
-    estimatedEarnings: 8.5,
-    orderTime: new Date().toISOString(),
-  },
-];
+// const mockDeliveryOrders: DeliveryOrder[] = [
+//   {
+//     id: "1",
+//     deliveryTime: "30分钟内(19:45前)送达",
+//     estimatedEarnings: "4.8",
+//     fromStore: "蜜雪冰城-德润城店",
+//     fromAddress: "义务大道337号",
+//     toAddress: "重庆华府酒店(财富广场店)八楼802",
+//     fromDistance: "300",
+//     toDistance: "300",
+//     tag: "新人体验单",
+//     items: "货品：食品小吃·2公斤·2件",
+//     notes: "备注：other-#其他",
+//     buttonText: "接单",
+//     status: "new",
+//     priority: "medium",
+//     estimatedEarnings: 8.5,
+//     orderTime: new Date().toISOString(),
+//   },
+//   {
+//     id: "2",
+//     deliveryTime: "30分钟内(19:45前)送达",
+//     estimatedEarnings: "4.8",
+//     fromStore: "蜜雪冰城-德润城店",
+//     fromAddress: "义务大道337号",
+//     toAddress: "重庆华府酒店(财富广场店)八楼802",
+//     fromDistance: "300",
+//     toDistance: "300",
+//     tag: "新人体验单",
+//     items: "货品：食品小吃·2公斤·2件",
+//     notes: "备注：other-#其他",
+//     buttonText: "接单",
+//     status: "new",
+//     priority: "medium",
+//     estimatedEarnings: 8.5,
+//     orderTime: new Date().toISOString(),
+//   },
+// ];
 
 export function DeliveryAppLayout({
   className,
-  orders = mockOrders,
+  orders = mockDeliveryOrders,
   activeTab = "new-tasks",
   isWorking = false,
   status = "已收工",

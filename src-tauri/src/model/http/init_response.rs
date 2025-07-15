@@ -1,21 +1,24 @@
-use serde::{Deserialize, Serialize};
+#![allow(unused)]
+use crate::model::event::app_started_result::AppStartedResult;
 use crate::plugin;
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct InitResponse {
-  user: User,
-  initial_page: String
+  pub status: bool,
+  pub user: User,
+  // initial_page: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
-struct User {
-  user_id: String,
-  user_type: String,
-  phone_number: String,
+pub struct User {
+  pub user_id: String,
+  pub user_type: String,
+  pub phone_number: String,
 }
 
-impl From<plugin::error::Error> for crate::core::error::Error {
-  fn from(val: plugin::error::Error) -> Self {
-    crate::core::error::Error::PluginError(val)
+impl core::fmt::Display for InitResponse {
+  fn fmt(&self, fmt: &mut core::fmt::Formatter) -> Result<(), core::fmt::Error> {
+    write!(fmt, "{self:?}")
   }
 }

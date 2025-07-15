@@ -1,0 +1,5 @@
+<!-- src-tauri/ios/Info.plist -->
+<dict>
+  <key>NSLocationWhenInUseUsageDescription</key>
+  <string>需要定位权限以提供位置服务</string>
+</dict>

@@ -103,9 +103,9 @@ src/
 ├── utils/
 │   └── mobile.ts          # Mobile utilities
 ├── types/
-│   └── delivery.ts        # TypeScript interfaces
+│   └── user_settings.ts        # TypeScript interfaces
 └── data/
-    └── mockOrders.ts      # Sample data
+    └── mockDeliveryOrders.ts      # Sample data
 
 src-tauri/
 ├── src/

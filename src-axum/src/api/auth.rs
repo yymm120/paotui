@@ -104,14 +104,15 @@ mod tests {
   use axum::body::Body;
   use axum::http;
   use axum::http::header::AUTHORIZATION;
-  use axum::http::{Method, Request, StatusCode};
+  use axum::http::{HeaderMap, Method, Request, StatusCode};
   use http_body_util::BodyExt;
   use serde_json::json;
   // for `collect`
   use tower::{Service, ServiceExt};
   use crate::model::auth::UserType;
   use crate::model::table::user_table::UserTable;
-  use crate::utils::jwt::{generate_claims, generate_token};
+  use crate::service::common::get_token_from_header;
+  use crate::utils::jwt::{generate_claims, generate_token, verify_jwt};
   // for `call`, `oneshot`, and `ready`
 
   #[tokio::test]
@@ -185,4 +186,48 @@ mod tests {
     println!("body: {:?}", body);
     Ok(())
   }
+
+  #[tokio::test]
+  async fn test_handler_login_handler() -> anyhow::Result<()> {
+    let db = new_db_pool("postgres://postgres:postgres@localhost/paotui").await?;
+    let app_state = AppState { db };
+
+    let app = app_routes(app_state).await;
+
+    let request = Request::builder()
+      .uri("/api/login")
+      .header(AUTHORIZATION, "")
+      .header(http::header::CONTENT_TYPE, mime::APPLICATION_JSON.as_ref())
+      .method(Method::POST)
+      .body(Body::from(serde_json::to_vec(&json!({
+        "user_phone": "861781534953".to_string(),
+        "code": "1234".to_string(),
+      }))?))?;
+
+    let response = app.clone().oneshot(request).await.unwrap();
+
+    let token = response.headers().get(AUTHORIZATION).unwrap().to_owned();
+    let body = response.into_body().collect().await.unwrap().to_bytes();
+    println!("body: {:?}", body);
+    println!("token: {:?}", token.clone());
+
+    let mut header_map = HeaderMap::new();
+    header_map.insert(AUTHORIZATION, token);
+    let token = get_token_from_header(&header_map).unwrap();
+    println!("token: {:?}", token.clone());
+
+    let request = Request::builder()
+      .uri("/api/_")
+      .header(AUTHORIZATION, format!("Bearer {}", token))
+      .method(Method::GET)
+      .body(Body::empty())?;
+
+    let claims = verify_jwt(Some(token))?;
+    let response = app.clone().oneshot(request).await.unwrap();
+
+    let body = response.into_body().collect().await.unwrap().to_bytes();
+    println!("body: {:?}", body);
+    Ok(())
+  }
 }
+

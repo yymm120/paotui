@@ -1,53 +1,17 @@
-export interface DeliveryOrder {
-  id: string;
-  deliveryTime: string;
-  // 送达时间
-  deliveryTime_ArrivedTime: Date;
-  // 剩余时间
-  deliveryTime_RemainingTime: number;
 
-  address_FromStore: string;
-  address_fromCurrent: string;
-  address_to: string;
-  fromDistance: string;
-  toDistance: string;
-  tag?: string;
-  items: string;
-  notes?: string;
-  buttonText: string;
-  buttonColor?: string;
-  status: "new" | "pickup" | "delivery" | "completed";
-  priority: "high" | "medium" | "low";
-  estimatedEarnings: number;
-  orderTime: string;
-}
 
-export interface DeliveryAppState {
-  activeTab: "new-tasks" | "pickup" | "delivery";
-  isWorking: boolean;
-  userStatus: string;
-  filterType: "comprehensive" | "distance" | "earnings" | "time";
-  orders: DeliveryOrder[];
-  acceptedOrders: string[];
-  notifications: Notification[];
-}
-
-export interface Notification {
-  id: string;
-  title: string;
-  message: string;
-  type: "info" | "success" | "warning" | "error";
-  timestamp: Date;
-  read: boolean;
-}
 
 export interface UserSettings {
-  autoAcceptOrders: boolean;
-  minOrderValue: number;
-  maxDeliveryDistance: number;
-  workingHours: {
+  // 自动接单模式
+  auto_accept_orders: boolean;
+  // 最低订单金额
+  min_order_value: number;
+  // 最大配送距离
+  max_delivery_distance: number;
+  // 工作时间
+  working_hours: {
     start: string;
     end: string;
   };
-  soundNotifications: boolean;
+  sound_notifications: boolean;
 }

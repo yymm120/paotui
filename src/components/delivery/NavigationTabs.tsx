@@ -26,13 +26,9 @@ export function NavigationTabs({
       )}
     >
       {tabs.map((tab) => (
-        <div
-          key={tab.id}
-          className="flex flex-1 flex-col items-center justify-center gap-2.5 px-2 py-2.5 sm:w-24 sm:flex-none sm:items-start sm:px-4"
-        >
-          <button
+          <button key={tab.id}
             onClick={() => onTabChange?.(tab.id)}
-            className="flex min-h-[44px] items-center justify-center gap-1 px-2 py-2 active:bg-neutral-800 rounded sm:min-h-fit sm:px-0.5 sm:py-1"
+            className="flex min-w-24 min-h-12 items-center justify-center gap-1 px-2 py-2 active:bg-neutral-800 rounded sm:min-h-fit sm:px-0.5 sm:py-1"
           >
             <span
               className={cn(
@@ -47,7 +43,6 @@ export function NavigationTabs({
               stroke={activeTab === tab.id ? "white" : "#A7A7A7"}
             />
           </button>
-        </div>
       ))}
     </div>
   );

@@ -18,7 +18,7 @@ export function DistanceIndicator({
       <div className="flex min-h-[80px] flex-1 flex-col items-center justify-center gap-1 rounded-xl bg-neutral-100 px-1 py-2 sm:h-[100px] sm:rounded-2xl">
         {/* From Distance */}
         <div className="flex h-5 w-full flex-shrink-0 flex-col items-center sm:h-6">
-          <div className="w-full text-center text-[10px] font-bold text-black sm:text-xs">
+          <div className="w-full text-center text-[10px] font-extrabold text-black sm:text-xs">
             {fromDistance}
           </div>
           <div className="w-full text-center text-[7px] font-normal text-neutral-500 sm:text-[8px]">

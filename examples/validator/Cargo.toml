@@ -1,0 +1,12 @@
+[package]
+name = "example-validator"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+validator = { version = "0.20.0", features = ["derive"] }
+thiserror = "2.0.12"
+tokio = { version = "1.46.1", features = ["full"] }
+sqlx = { version = "0.8.6", features = [ "runtime-tokio-rustls", "postgres", "uuid", "time" ] }
+anyhow = "1.0.98"
+uuid = {version = "1.17.0", features = ["serde", "v4","fast-rng",]}

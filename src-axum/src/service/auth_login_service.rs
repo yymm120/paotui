@@ -36,6 +36,7 @@ pub async fn login(
     token = profile_guard.token.clone();
     user_type = profile_guard.user_type.clone();
   }
+  println!("user type: {}", user_type);
 
   // 检查用户类型
   match profile_clone.user_type {
@@ -48,16 +49,19 @@ pub async fn login(
       match exist_user {
         // 果然存在, 这是未登录用户, 现在需要登录
         Some(user_item) => {
+          println!("user type: {}", user_type);
           let status = verify_login_code(user_phone.as_str(), code.as_str())
             .await
             .unwrap_or(false);
+          println!("status: {}", status);
           match status {
             true => {
               let claims = generate_claims(UserType::VerifiedUser, Some(user_item));
               let token = generate_token(UserType::VerifiedUser, claims)?;
               {
                 let mut profile = profile.lock().unwrap();
-                profile.token = token.clone(); // TODO 新token
+                profile.token = token.clone();
+                profile.user_type = UserType::VerifiedUser;
               }
               Ok(Json::from(ResponseForLogin { status: true }))
             }
@@ -76,7 +80,7 @@ pub async fn login(
               let token = generate_token(UserType::VerifiedUser, claims)?;
               {
                 let mut profile = profile.lock().unwrap();
-                profile.token = token.clone(); // TODO 新token
+                profile.token = token.clone();
               }
               Ok(Json::from(ResponseForLogin { status: true }))
             }
