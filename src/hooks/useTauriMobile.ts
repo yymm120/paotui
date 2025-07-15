@@ -66,7 +66,7 @@ export function useTauriMobile() {
   const loadOrders = useCallback(async () => {
     if (!invoke) return;
     try {
-      const ordersData = await invoke("get_orders") as TauriDeliveryOrder[];
+      const ordersData = await invoke<TauriDeliveryOrder[]>("get_orders");
       setOrders(ordersData);
     } catch (error) {
       console.error("Failed to load orders:", error);

@@ -1,9 +1,9 @@
-import type { TauriDeliveryOrder, LocationData } from "../hooks/useTauriMobile";
+import type { TauriDeliveryOrder, LocationData } from "../types/tauri";
 
 // Mobile platform detection
 export function isMobile(): boolean {
   return (
-    typeof window !== "undefined" && (window as any).__TAURI__ !== undefined
+    typeof window !== "undefined" && (window as import('../types/tauri').TauriWindow).__TAURI__ !== undefined
   );
 }
 
@@ -27,16 +27,24 @@ export function calculateTotalDistance(order: TauriDeliveryOrder): number {
 export function formatDeliveryTime(timeString: string): string {
   // Extract time from strings like "30分钟内(19:45前)送达"
   const timeMatch = timeString.match(/(\d+)分钟内/);
-  if (timeMatch) {
-    const minutes = parseInt(timeMatch[1]);
-    return `${minutes}分钟内`;
+  if (timeMatch && timeMatch[1]) {
+    const minutes = parseInt(timeMatch[1], 10);
+    if (!isNaN(minutes)) {
+      return `${minutes}分钟内`;
+    }
   }
   return timeString;
 }
 
 export function getTimeUntilDelivery(deliveryTime: string): number {
   const timeMatch = deliveryTime.match(/(\d+)分钟内/);
-  return timeMatch ? parseInt(timeMatch[1]) : 30;
+  if (timeMatch && timeMatch[1]) {
+    const minutes = parseInt(timeMatch[1], 10);
+    if (!isNaN(minutes)) {
+      return minutes;
+    }
+  }
+  return 30;
 }
 
 export function isWithinWorkingHours(
@@ -46,8 +54,21 @@ export function isWithinWorkingHours(
   const now = new Date();
   const currentTime = now.getHours() * 60 + now.getMinutes();
 
-  const [startHour, startMin] = startTime.split(":").map(Number);
-  const [endHour, endMin] = endTime.split(":").map(Number);
+  const startParts = startTime.split(":");
+  const endParts = endTime.split(":");
+  
+  if (startParts.length !== 2 || endParts.length !== 2) {
+    return false;
+  }
+
+  const startHour = parseInt(startParts[0], 10);
+  const startMin = parseInt(startParts[1], 10);
+  const endHour = parseInt(endParts[0], 10);
+  const endMin = parseInt(endParts[1], 10);
+
+  if (isNaN(startHour) || isNaN(startMin) || isNaN(endHour) || isNaN(endMin)) {
+    return false;
+  }
 
   const start = startHour * 60 + startMin;
   const end = endHour * 60 + endMin;
@@ -88,7 +109,7 @@ export function formatCoordinates(lat: number, lng: number): string {
 export function getOrderStatusIcon(
   status: TauriDeliveryOrder["status"],
 ): string {
-  const icons = {
+  const icons: Record<TauriDeliveryOrder["status"], string> = {
     New: "📦",
     Pickup: "🚶",
     Delivery: "🚗",
@@ -100,7 +121,7 @@ export function getOrderStatusIcon(
 export function getOrderPriorityColor(
   priority: TauriDeliveryOrder["priority"],
 ): string {
-  const colors = {
+  const colors: Record<TauriDeliveryOrder["priority"], string> = {
     High: "text-red-600",
     Medium: "text-yellow-600",
     Low: "text-green-600",
@@ -129,7 +150,7 @@ export function sortOrdersByEarnings(
 export function sortOrdersByPriority(
   orders: TauriDeliveryOrder[],
 ): TauriDeliveryOrder[] {
-  const priorityOrder = { High: 3, Medium: 2, Low: 1 };
+  const priorityOrder: Record<TauriDeliveryOrder["priority"], number> = { High: 3, Medium: 2, Low: 1 };
   return [...orders].sort(
     (a, b) => priorityOrder[b.priority] - priorityOrder[a.priority],
   );
@@ -195,11 +216,11 @@ export async function loadOrderData(): Promise<TauriDeliveryOrder[] | null> {
 }
 
 // Performance utilities
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number,
 ): (...args: Parameters<T>) => void {
-  let timeout: NodeJS.Timeout | null = null;
+  let timeout: ReturnType<typeof setTimeout> | null = null;
 
   return (...args: Parameters<T>) => {
     if (timeout) {
@@ -212,7 +233,7 @@ export function debounce<T extends (...args: any[]) => any>(
   };
 }
 
-export function throttle<T extends (...args: any[]) => any>(
+export function throttle<T extends (...args: unknown[]) => unknown>(
   func: T,
   limit: number,
 ): (...args: Parameters<T>) => void {
@@ -255,13 +276,15 @@ export function handleAppResume(): void {
 // Battery optimization
 export function isBatteryOptimizationEnabled(): boolean {
   // Check if battery optimization might affect location tracking
-  return (navigator as any).getBattery !== undefined;
+  const nav = navigator as import('../types/tauri').ExtendedNavigator;
+  return nav.getBattery !== undefined;
 }
 
 export async function getBatteryLevel(): Promise<number> {
   try {
-    if ("getBattery" in navigator) {
-      const battery = await (navigator as any).getBattery();
+    const nav = navigator as import('../types/tauri').ExtendedNavigator;
+    if (nav.getBattery) {
+      const battery = await nav.getBattery();
       return battery.level * 100;
     }
   } catch (error) {
@@ -276,11 +299,9 @@ export function isOnline(): boolean {
 }
 
 export function getNetworkType(): string {
-  const connection =
-    (navigator as any).connection ||
-    (navigator as any).mozConnection ||
-    (navigator as any).webkitConnection;
-  return connection ? connection.effectiveType || "unknown" : "unknown";
+  const nav = navigator as import('../types/tauri').ExtendedNavigator;
+  const connection = nav.connection || nav.mozConnection || nav.webkitConnection;
+  return connection?.effectiveType || "unknown";
 }
 
 // Emergency utilities

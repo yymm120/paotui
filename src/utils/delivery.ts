@@ -16,8 +16,13 @@ export function sortOrdersByPriority(orders: DeliveryOrder[]): DeliveryOrder[] {
 
 export function sortOrdersByDistance(orders: DeliveryOrder[]): DeliveryOrder[] {
   return [...orders].sort((a, b) => {
-    const totalDistanceA = parseInt(a.distance_current_to_store) + parseInt(a.distance_store_to_customer);
-    const totalDistanceB = parseInt(b.distance_current_to_store) + parseInt(b.distance_store_to_customer);
+    const totalDistanceA = parseInt(a.fromDistance, 10) + parseInt(a.toDistance, 10);
+    const totalDistanceB = parseInt(b.fromDistance, 10) + parseInt(b.toDistance, 10);
+
+    if (isNaN(totalDistanceA) || isNaN(totalDistanceB)) {
+      return 0;
+    }
+
     return totalDistanceA - totalDistanceB;
   });
 }
@@ -33,7 +38,10 @@ export function sortOrdersByTime(orders: DeliveryOrder[]): DeliveryOrder[] {
 }
 
 export function formatDistance(distance: string): string {
-  const dist = parseInt(distance);
+  const dist = parseInt(distance, 10);
+  if (isNaN(dist)) {
+    return "0m";
+  }
   if (dist >= 1000) {
     return `${(dist / 1000).toFixed(1)}km`;
   }
@@ -41,11 +49,21 @@ export function formatDistance(distance: string): string {
 }
 
 export function formatEarnings(earnings: number): string {
+  if (isNaN(earnings)) {
+    return "￥0.00";
+  }
   return `￥${earnings.toFixed(2)}`;
 }
 
 export function calculateTotalDistance(order: DeliveryOrder): number {
-  return parseInt(order.distance_current_to_store) + parseInt(order.distance_store_to_customer);
+  const fromDist = parseInt(order.distance_current_to_store, 10);
+  const toDist = parseInt(order.distance_store_to_customer, 10);
+
+  if (isNaN(fromDist) || isNaN(toDist)) {
+    return 0;
+  }
+
+  return fromDist + toDist;
 }
 
 export function getOrderStatusText(status: DeliveryOrder["status"]): string {

@@ -24,9 +24,6 @@ const initialState: DeliveryAppState = {
   notifications: mockNotifications,
 };
 
-
-
-
 export function useDeliveryApp() {
   const [state, setState] = useState<DeliveryAppState>(initialState);
 
