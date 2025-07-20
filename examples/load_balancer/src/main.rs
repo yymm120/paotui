@@ -39,7 +39,7 @@ impl ProxyHttp for BackoffRetryProxy {
       info!("sleeping for ms: {sleep_ms:?}");
       tokio::time::sleep(sleep_ms).await;
     }
-    let mut peer = HttpPeer::new(("10.0.0.1", 80), false, "".into());
+    let mut peer = HttpPeer::new(("127.0.0.1", 3000), false, "".into());
     peer.options.connection_timeout = Some(Duration::from_millis(100));
     Ok(Box::new(peer))
   }
@@ -70,7 +70,18 @@ fn main() {
 
   let mut my_proxy =
     pingora_proxy::http_proxy_service(&my_server.configuration, BackoffRetryProxy);
-  my_proxy.add_tcp("0.0.0.0:6195");
+  my_proxy.add_tcp("0.0.0.0:80");
+    // let cert_path = format!("{}/tests/keys/server.crt", env!("CARGO_MANIFEST_DIR"));
+    // let key_path = format!("{}/tests/keys/key.pem", env!("CARGO_MANIFEST_DIR"));
+
+    // mkcert -key-file key.pem -cert-file cert.pem example.com *.example.com
+    let cert_path = "cert.pem";
+    let key_path = "key.pem";
+
+    let mut tls_settings =
+        pingora_core::listeners::tls::TlsSettings::intermediate(&cert_path, &key_path).unwrap();
+    tls_settings.enable_h2();
+    my_proxy.add_tls_with_settings("0.0.0.0:443", None, tls_settings);
 
   my_server.add_service(my_proxy);
   my_server.run_forever();
