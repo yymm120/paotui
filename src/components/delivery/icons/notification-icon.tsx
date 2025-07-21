@@ -1,5 +1,3 @@
-
-
 interface NotificationIconProps {
   className?: string;
 }

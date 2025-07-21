@@ -1,5 +1,3 @@
-
-
 interface HamburgerIconProps {
   className?: string;
 }
@@ -7,8 +5,8 @@ interface HamburgerIconProps {
 export function HamburgerIcon({ className }: HamburgerIconProps) {
   return (
     <svg
-      width="17"
-      height="21"
+      width="20"
+      height="20"
       viewBox="0 0 17 21"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

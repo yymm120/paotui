@@ -1,5 +1,3 @@
-
-
 interface StatusIconProps {
   className?: string;
 }
