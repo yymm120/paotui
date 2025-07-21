@@ -16,8 +16,8 @@ export function SidebarContent() {
 
 
   return (
-    <div className="self-stretch px-3 pt-4 bg-white inline-flex flex-col justify-start items-center gap-3 overflow-hidden">
-          <div className="self-stretch h-12 py-2 inline-flex justify-start items-start gap-2.5 overflow-hidden">
+    <div className="self-stretch px-3 bg-white inline-flex flex-col justify-start items-center gap-3 overflow-hidden">
+          <div className="self-stretch h-12 inline-flex justify-start items-start gap-2.5 overflow-hidden">
             <div className="self-stretch flex justify-start items-center gap-2 overflow-hidden">
 
               <Avatar className={"cursor-pointer "} >
