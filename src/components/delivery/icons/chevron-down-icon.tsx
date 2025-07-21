@@ -1,5 +1,3 @@
-
-
 interface ChevronDownIconProps {
   className?: string;
   stroke?: string;
@@ -18,6 +16,7 @@ export function ChevronDownIcon({
       xmlns="http://www.w3.org/2000/svg"
       className={className}
     >
+      <title>chevron-down-icon</title>
       <path
         d="M3 4.5L6 7.5L9 4.5"
         stroke={stroke}

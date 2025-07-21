@@ -1,5 +1,4 @@
-
-export function RightIcon ({color}: {color?: string}) {
+export function RightIcon({ color }: { color?: string }) {
   return (
     <svg
       width="16"
@@ -8,6 +7,7 @@ export function RightIcon ({color}: {color?: string}) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <title>right-icon</title>
       <path
         d="M6 12L10 8L6 4"
         stroke={color}
@@ -16,5 +16,5 @@ export function RightIcon ({color}: {color?: string}) {
         stroke-linejoin="round"
       />
     </svg>
-  )
+  );
 }

@@ -12,6 +12,7 @@ export function HamburgerIcon({ className }: HamburgerIconProps) {
       xmlns="http://www.w3.org/2000/svg"
       className={className}
     >
+      <title>hamburger-icon</title>
       <path
         d="M2.125 10.5H14.875M2.125 15.75H14.875M2.125 5.25H14.875"
         stroke="white"

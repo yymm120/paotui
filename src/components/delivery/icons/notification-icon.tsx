@@ -12,6 +12,7 @@ export function NotificationIcon({ className }: NotificationIconProps) {
       xmlns="http://www.w3.org/2000/svg"
       className={className}
     >
+      <title>notification-icon</title>
       <path
         d="M15 0.25C23.1462 0.25 29.75 6.8538 29.75 15C29.75 23.1462 23.1462 29.75 15 29.75C6.8538 29.75 0.25 23.1462 0.25 15C0.25 6.8538 6.8538 0.25 15 0.25Z"
         fill="#1A1A1A"

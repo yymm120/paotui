@@ -1,6 +1,9 @@
 // import { Button } from "@/components/ui/button"
 
 import { HamburgerIcon } from "@/components/delivery/icons/hamburger-icon.tsx";
+import { SidebarContent } from "@/components/delivery/sidebar/sidebar-content.tsx";
+import { SidebarHeader } from "@/components/delivery/sidebar/sidebar-header.tsx";
+import { Button } from "@/components/ui/button.tsx";
 import {
   Sheet,
   SheetContent,
@@ -9,15 +12,14 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils.ts";
-import {Button} from "@/components/ui/button.tsx";
-
-import {SidebarHeader} from "@/components/delivery/sidebar/sidebar-header.tsx";
-import {SidebarContent} from "@/components/delivery/sidebar/sidebar-content.tsx";
 
 export function MobileSidebar() {
   return (
     <Sheet>
-      <SheetTrigger asChild className={"w-8 h-8 bg-zinc-900 rounded-2xl outline-neutral-500 "}>
+      <SheetTrigger
+        asChild
+        className={"w-8 h-8 bg-zinc-900 rounded-2xl outline-neutral-500 "}
+      >
         <Button>
           <HamburgerIcon />
         </Button>
@@ -35,7 +37,6 @@ export function MobileSidebar() {
           {/*<SheetDescription />*/}
         </SheetHeader>
         <SidebarContent />
-
       </SheetContent>
     </Sheet>
   );
