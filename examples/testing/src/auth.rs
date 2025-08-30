@@ -20,7 +20,7 @@ pub struct User {
 }
 
 fn main(){}
-pub const END_POINT_URL: &str = "http://127.0.0.1:3000";
+pub const END_POINT_URL: &str = "http://192.168.10.107:3000";
 pub fn q(path: &str) -> Url {
   let base_url = Url::parse(END_POINT_URL).unwrap();
   base_url.join(path).expect(

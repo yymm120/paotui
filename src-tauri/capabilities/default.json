@@ -2,9 +2,7 @@
   "$schema": "../gen/schemas/mobile-schema.json",
   "identifier": "main-capability",
   "description": "Capability for the main window",
-  "windows": [
-    "main"
-  ],
+  "windows": ["main"],
   "permissions": [
     "core:path:default",
     "core:event:default",
@@ -24,6 +22,9 @@
         },
         {
           "url": "http://127.0.0.1:3000"
+        },
+        {
+          "url": "http://192.168.10.107:3000"
         }
       ],
       "deny": [
@@ -36,6 +37,11 @@
     "notification:default",
     "notification:default",
     "sql:default",
-    "log:default"
+    "geolocation:allow-check-permissions",
+    "geolocation:allow-request-permissions",
+    "geolocation:allow-get-current-position",
+    "geolocation:allow-watch-position",
+    "log:default",
+    "txmap:default"
   ]
 }

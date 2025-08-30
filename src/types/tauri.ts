@@ -5,20 +5,24 @@ export interface TauriWindow {
 }
 
 export interface TauriAPI {
-  invoke: <T = unknown>(cmd: string, args?: Record<string, unknown>) => Promise<T>;
+  invoke: <T = unknown>(
+    cmd: string,
+    args?: Record<string, unknown>,
+  ) => Promise<T>;
   convertFileSrc: (filePath: string, protocol?: string) => string;
 }
 
-export interface TauriInvokeFunction {
-  <T = unknown>(cmd: string, args?: Record<string, unknown>): Promise<T>;
-}
+export type TauriInvokeFunction = <T = unknown>(
+  cmd: string,
+  args?: Record<string, unknown>,
+) => Promise<T>;
 
 export interface TauriPermissionGranted {
   isPermissionGranted(): Promise<boolean>;
 }
 
 export interface TauriPermissionRequest {
-  requestPermission(): Promise<'granted' | 'denied' | 'default'>;
+  requestPermission(): Promise<"granted" | "denied" | "default">;
 }
 
 export interface TauriNotificationOptions {
@@ -60,14 +64,14 @@ export interface TauriGeolocation {
   watchPosition(
     options: TauriPositionOptions,
     successCallback: (position: TauriPosition) => void,
-    errorCallback: (error: TauriPositionError) => void
+    errorCallback: (error: TauriPositionError) => void,
   ): Promise<() => void>;
 }
 
 export interface TauriPhotoOptions {
   quality?: number;
   allowEdit?: boolean;
-  sourceType?: 'camera' | 'library';
+  sourceType?: "camera" | "library";
 }
 
 export interface TauriPhoto {
@@ -85,7 +89,11 @@ export interface TauriWriteOptions {
 }
 
 export interface TauriFileSystem {
-  writeTextFile(fileName: string, content: string, options?: TauriWriteOptions): Promise<void>;
+  writeTextFile(
+    fileName: string,
+    content: string,
+    options?: TauriWriteOptions,
+  ): Promise<void>;
 }
 
 export interface TauriBaseDirectory {
@@ -152,8 +160,16 @@ export interface ExtendedNavigator extends Navigator {
 
 // Network API types
 export interface NetworkInformation {
-  effectiveType?: '2g' | '3g' | '4g' | 'slow-2g';
-  type?: 'bluetooth' | 'cellular' | 'ethernet' | 'wifi' | 'wimax' | 'none' | 'other' | 'unknown';
+  effectiveType?: "2g" | "3g" | "4g" | "slow-2g";
+  type?:
+    | "bluetooth"
+    | "cellular"
+    | "ethernet"
+    | "wifi"
+    | "wimax"
+    | "none"
+    | "other"
+    | "unknown";
   downlink?: number;
   downlinkMax?: number;
   rtt?: number;

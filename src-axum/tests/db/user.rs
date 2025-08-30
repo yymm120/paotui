@@ -29,7 +29,7 @@ async fn query_pre_builder() -> anyhow::Result<()> {
 
   // case1: 预处理查询 (参数化查询)
   let res = pool
-    .execute(sqlx::query("SELECT * FROM user_table"))
+    .execute(sqlx::query("SELECT * FROM public.user"))
     .await?;
   assert_eq!(16, res.rows_affected());
 
@@ -44,13 +44,13 @@ async fn query_pre_builder() -> anyhow::Result<()> {
   let mut conn = conn_mutable().await?;
 
   // case3: fetch 方法返回流式类型, 需要通过遍历获取每一行的数据
-  let query = sqlx::query("SELECT * FROM user_table");
+  let query = sqlx::query("SELECT * FROM public.user");
   let mut result_stream = query.fetch(&mut conn);
   /* try_next 需要依赖项 use futures::TryStreamExt; */
   /* try_get  需要依赖项 use sqlx::Row; */
   while let Some(row) = result_stream.try_next().await? {
-    let user_id: Uuid = row.try_get("user_id")?;
-    println!("{:?}", user_id.to_string());
+    // let user_id: Uuid = row.try_get("user_id")?;
+    // println!("{:?}", user_id.to_string());
   }
 
   Ok(())
@@ -85,13 +85,18 @@ async fn query_mapping_instance() -> anyhow::Result<()> {
 #[tokio::test(flavor = "multi_thread")]
 async fn test3_query_macro_case1() -> anyhow::Result<()> {
   let pool = pool().await;
-  let users = sqlx::query!("SELECT * FROM user_table")
+  let users = sqlx::query!("SELECT * FROM public.user")
     .fetch_all(pool) // -> Vec<{ country: String, count: i64 }>
     .await?
     .into_iter()
     .map(|record| User {
       user_id: record.user_id,
-      user_phone: record.user_phone,
+      username: "".to_string(),
+      password: "".to_string(),
+      telephone: "".to_string(),
+      created_at: record.created_at,
+      updated_at: record.updated_at,
+      deleted_at: None,
     })
     .collect::<Vec<User>>();
   Ok(())
@@ -101,13 +106,12 @@ async fn test3_query_macro_case1() -> anyhow::Result<()> {
 #[tokio::test(flavor = "multi_thread")]
 async fn test4_query_macro_case2() -> anyhow::Result<()> {
   let pool = pool().await;
-  let users = sqlx::query_as!(User, "SELECT * FROM user_table")
+  let users = sqlx::query_as!(User, "SELECT * FROM public.user")
     .fetch_all(pool)
     .await?;
   let res = sqlx::query_as!(
     User,
-    "INSERT INTO user_table (user_id, user_phone) VALUES ($1, $2) RETURNING *",
-    Uuid::default(),
+    "INSERT INTO public.user (telephone) VALUES ($1) RETURNING *",
     "123"
   )
   .fetch_optional(pool)

@@ -1,8 +1,10 @@
 // Component Props Type Definitions for Enterprise Compliance
 
-import type { DeliveryOrder } from './delivery';
+// import type { DeliveryOrder } from './delivery';
 
 // Header Component Props
+import type { DeliveryTask } from "@/types/delivery_task.ts";
+
 export interface DeliveryAppHeaderProps {
   onMenuClick: () => void;
   onStatusClick: () => void;
@@ -24,13 +26,13 @@ export interface FilterSectionProps {
 
 // Card List Component Props
 export interface DeliveryCardListProps {
-  orders: DeliveryOrder[];
+  orders: DeliveryTask[];
   onAcceptOrder: (orderId: string) => void;
 }
 
 // Individual Card Component Props
 export interface DeliveryCardProps {
-  order: DeliveryOrder;
+  order: DeliveryTask;
   onAcceptOrder: (orderId: string) => void;
 }
 
@@ -48,8 +50,8 @@ export interface DeliveryAppLayoutProps {
   isWorking: boolean;
   status: string;
   filterLabel: string;
-  orders: DeliveryOrder[];
-  
+  orders: DeliveryTask[];
+
   // Event handlers
   onMenuClick: () => void;
   onStatusClick: () => void;
@@ -99,13 +101,13 @@ export interface ChevronDownIconProps extends IconProps {}
 export interface HamburgerIconProps extends IconProps {}
 export interface NotificationIconProps extends IconProps {}
 export interface StatusIconProps extends IconProps {
-  status: 'online' | 'offline' | 'busy';
+  status: "online" | "offline" | "busy";
 }
 
 // Button Component Props
 export interface ButtonProps {
-  variant?: 'primary' | 'secondary' | 'danger' | 'success';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: "primary" | "secondary" | "danger" | "success";
+  size?: "sm" | "md" | "lg";
   disabled?: boolean;
   loading?: boolean;
   className?: string;
@@ -119,13 +121,13 @@ export interface ModalProps {
   onClose: () => void;
   title?: string;
   children: React.ReactNode;
-  size?: 'sm' | 'md' | 'lg' | 'xl';
+  size?: "sm" | "md" | "lg" | "xl";
 }
 
 // Form Component Props
 export interface FormInputProps {
   label: string;
-  type?: 'text' | 'email' | 'password' | 'number' | 'tel';
+  type?: "text" | "email" | "password" | "number" | "tel";
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;

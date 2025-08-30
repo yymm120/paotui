@@ -56,7 +56,7 @@ pub async fn auth_init(
     .unwrap()
     .to_string();
 
-  log::debug!("response token: {}", response_token.clone());
+  // log::debug!("response token: {}", response_token.clone());
 
   if response_token != client_token {
     let store = app_handle.store("token.json").unwrap();

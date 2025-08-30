@@ -1,6 +1,3 @@
-
-
-
 export interface UserSettings {
   // 自动接单模式
   auto_accept_orders: boolean;

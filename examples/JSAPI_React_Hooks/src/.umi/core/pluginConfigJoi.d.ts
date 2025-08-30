@@ -2,6 +2,4 @@
 // DO NOT CHANGE IT MANUALLY!
 // Created by Umi Plugin
 
-export interface IConfigFromPluginsJoi {
-
-}
+export type IConfigFromPluginsJoi = {};

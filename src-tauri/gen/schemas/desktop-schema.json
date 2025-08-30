@@ -6585,6 +6585,132 @@
           "markdownDescription": "Denies the values command without any pre-configured scope."
         },
         {
+          "description": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-fragment`\n- `allow-start-tx-map-with-channel`\n- `allow-clear-task`\n- `allow-clear-channel`\n- `allow-add-task`\n- `allow-watch-location`\n- `allow-watch-direction`\n- `allow-clear-watch-direction`\n- `allow-clear-watch-location`",
+          "type": "string",
+          "const": "txmap:default",
+          "markdownDescription": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-fragment`\n- `allow-start-tx-map-with-channel`\n- `allow-clear-task`\n- `allow-clear-channel`\n- `allow-add-task`\n- `allow-watch-location`\n- `allow-watch-direction`\n- `allow-clear-watch-direction`\n- `allow-clear-watch-location`"
+        },
+        {
+          "description": "Enables the add_task command without any pre-configured scope.",
+          "type": "string",
+          "const": "txmap:allow-add-task",
+          "markdownDescription": "Enables the add_task command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the clear_channel command without any pre-configured scope.",
+          "type": "string",
+          "const": "txmap:allow-clear-channel",
+          "markdownDescription": "Enables the clear_channel command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the clear_task command without any pre-configured scope.",
+          "type": "string",
+          "const": "txmap:allow-clear-task",
+          "markdownDescription": "Enables the clear_task command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the clear_watch_direction command without any pre-configured scope.",
+          "type": "string",
+          "const": "txmap:allow-clear-watch-direction",
+          "markdownDescription": "Enables the clear_watch_direction command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the clear_watch_location command without any pre-configured scope.",
+          "type": "string",
+          "const": "txmap:allow-clear-watch-location",
+          "markdownDescription": "Enables the clear_watch_location command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the fragment command without any pre-configured scope.",
+          "type": "string",
+          "const": "txmap:allow-fragment",
+          "markdownDescription": "Enables the fragment command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the ping command without any pre-configured scope.",
+          "type": "string",
+          "const": "txmap:allow-ping",
+          "markdownDescription": "Enables the ping command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the start_tx_map_with_channel command without any pre-configured scope.",
+          "type": "string",
+          "const": "txmap:allow-start-tx-map-with-channel",
+          "markdownDescription": "Enables the start_tx_map_with_channel command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the watch_direction command without any pre-configured scope.",
+          "type": "string",
+          "const": "txmap:allow-watch-direction",
+          "markdownDescription": "Enables the watch_direction command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the watch_location command without any pre-configured scope.",
+          "type": "string",
+          "const": "txmap:allow-watch-location",
+          "markdownDescription": "Enables the watch_location command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the add_task command without any pre-configured scope.",
+          "type": "string",
+          "const": "txmap:deny-add-task",
+          "markdownDescription": "Denies the add_task command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the clear_channel command without any pre-configured scope.",
+          "type": "string",
+          "const": "txmap:deny-clear-channel",
+          "markdownDescription": "Denies the clear_channel command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the clear_task command without any pre-configured scope.",
+          "type": "string",
+          "const": "txmap:deny-clear-task",
+          "markdownDescription": "Denies the clear_task command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the clear_watch_direction command without any pre-configured scope.",
+          "type": "string",
+          "const": "txmap:deny-clear-watch-direction",
+          "markdownDescription": "Denies the clear_watch_direction command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the clear_watch_location command without any pre-configured scope.",
+          "type": "string",
+          "const": "txmap:deny-clear-watch-location",
+          "markdownDescription": "Denies the clear_watch_location command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the fragment command without any pre-configured scope.",
+          "type": "string",
+          "const": "txmap:deny-fragment",
+          "markdownDescription": "Denies the fragment command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the ping command without any pre-configured scope.",
+          "type": "string",
+          "const": "txmap:deny-ping",
+          "markdownDescription": "Denies the ping command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the start_tx_map_with_channel command without any pre-configured scope.",
+          "type": "string",
+          "const": "txmap:deny-start-tx-map-with-channel",
+          "markdownDescription": "Denies the start_tx_map_with_channel command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the watch_direction command without any pre-configured scope.",
+          "type": "string",
+          "const": "txmap:deny-watch-direction",
+          "markdownDescription": "Denies the watch_direction command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the watch_location command without any pre-configured scope.",
+          "type": "string",
+          "const": "txmap:deny-watch-location",
+          "markdownDescription": "Denies the watch_location command without any pre-configured scope."
+        },
+        {
           "description": "Allows connecting and sending data to a WebSocket server\n#### This default permission set includes:\n\n- `allow-connect`\n- `allow-send`",
           "type": "string",
           "const": "websocket:default",

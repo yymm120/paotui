@@ -1,5 +1,5 @@
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface BottomFooterProps {
   className?: string;
@@ -17,12 +17,13 @@ export function BottomFooter({
   return (
     <div
       className={cn(
-        "fixed bottom-0 left-0 flex h-20 w-full items-center gap-3 bg-white px-3 border-t border-gray-200 sm:gap-4 sm:px-4",
+        "flex w-full items-center gap-3 bg-white px-3 border-t border-gray-200 sm:gap-4 sm:px-4",
         className,
       )}
     >
       {/* Settings Button */}
       <button
+        type={"button"}
         onClick={onSettingsClick}
         className="min-h-[44px] px-2 py-2 text-sm font-normal text-black active:bg-gray-100 rounded whitespace-nowrap"
       >

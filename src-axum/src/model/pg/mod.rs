@@ -1,0 +1,25 @@
+/// delivery_person: 42820
+pub mod delivery_person;
+/// task_app_user: 42862
+pub mod task_app_user;
+/// store: 42791
+pub mod store;
+/// delivery_task: 42912
+pub mod delivery_task;
+/// user: 42808
+pub mod user;
+/// delivery_app_user: 42833
+pub mod delivery_app_user;
+/// task_person: 42854
+pub mod task_person;
+/// address: 42883
+pub mod address;
+/// task_app_user_address: 42891
+pub mod task_app_user_address;
+/// task_address: 42904
+pub mod task_address;
+/// customer_person: 41132
+pub mod customer_person;
+
+pub mod task_view;
+pub mod error;

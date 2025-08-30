@@ -1,25 +1,29 @@
-import { type DeliveryOrder } from "@/types";
+import type { DeliveryTask } from "@/types";
 
 export function filterOrdersByStatus(
-  orders: DeliveryOrder[],
-  status: DeliveryOrder["status"],
-): DeliveryOrder[] {
+  orders: DeliveryTask[],
+  status: DeliveryTask["status"],
+): DeliveryTask[] {
   return orders.filter((order) => order.status === status);
 }
 
-export function sortOrdersByPriority(orders: DeliveryOrder[]): DeliveryOrder[] {
+export function sortOrdersByPriority(orders: DeliveryTask[]): DeliveryTask[] {
   const priorityOrder = { high: 3, medium: 2, low: 1 };
   return [...orders].sort(
     (a, b) => priorityOrder[b.priority] - priorityOrder[a.priority],
   );
 }
 
-export function sortOrdersByDistance(orders: DeliveryOrder[]): DeliveryOrder[] {
+export function sortOrdersByDistance(orders: DeliveryTask[]): DeliveryTask[] {
   return [...orders].sort((a, b) => {
-    const totalDistanceA = parseInt(a.fromDistance, 10) + parseInt(a.toDistance, 10);
-    const totalDistanceB = parseInt(b.fromDistance, 10) + parseInt(b.toDistance, 10);
+    const totalDistanceA =
+      parseInt(a.distance_store_to_customer, 10) +
+      parseInt(a.distance_store_to_customer, 10);
+    const totalDistanceB =
+      parseInt(b.distance_current_to_store, 10) +
+      parseInt(b.distance_store_to_customer, 10);
 
-    if (isNaN(totalDistanceA) || isNaN(totalDistanceB)) {
+    if (Number.isNaN(totalDistanceA) || Number.isNaN(totalDistanceB)) {
       return 0;
     }
 
@@ -27,19 +31,19 @@ export function sortOrdersByDistance(orders: DeliveryOrder[]): DeliveryOrder[] {
   });
 }
 
-export function sortOrdersByEarnings(orders: DeliveryOrder[]): DeliveryOrder[] {
+export function sortOrdersByEarnings(orders: DeliveryTask[]): DeliveryTask[] {
   return [...orders].sort((a, b) => b.estimatedEarnings - a.estimatedEarnings);
 }
 
-export function sortOrdersByTime(orders: DeliveryOrder[]): DeliveryOrder[] {
+export function sortOrdersByTime(orders: DeliveryTask[]): DeliveryTask[] {
   return [...orders].sort((a, b) => {
-    return a.time_order!.getTime() - b.time_order!.getTime();
+    return a.time_order?.getTime() - b.time_order?.getTime();
   });
 }
 
 export function formatDistance(distance: string): string {
   const dist = parseInt(distance, 10);
-  if (isNaN(dist)) {
+  if (Number.isNaN(dist)) {
     return "0m";
   }
   if (dist >= 1000) {
@@ -49,24 +53,24 @@ export function formatDistance(distance: string): string {
 }
 
 export function formatEarnings(earnings: number): string {
-  if (isNaN(earnings)) {
+  if (Number.isNaN(earnings)) {
     return "￥0.00";
   }
   return `￥${earnings.toFixed(2)}`;
 }
 
-export function calculateTotalDistance(order: DeliveryOrder): number {
+export function calculateTotalDistance(order: DeliveryTask): number {
   const fromDist = parseInt(order.distance_current_to_store, 10);
   const toDist = parseInt(order.distance_store_to_customer, 10);
 
-  if (isNaN(fromDist) || isNaN(toDist)) {
+  if (Number.isNaN(fromDist) || Number.isNaN(toDist)) {
     return 0;
   }
 
   return fromDist + toDist;
 }
 
-export function getOrderStatusText(status: DeliveryOrder["status"]): string {
+export function getOrderStatusText(status: DeliveryTask["status"]): string {
   const statusMap = {
     new: "新订单",
     pickup: "待取货",
@@ -76,10 +80,7 @@ export function getOrderStatusText(status: DeliveryOrder["status"]): string {
   return statusMap[status];
 }
 
-export function getTabOrdersCount(
-  orders: DeliveryOrder[],
-  tab: string,
-): number {
+export function getTabOrdersCount(orders: DeliveryTask[], tab: string): number {
   switch (tab) {
     case "new-tasks":
       return filterOrdersByStatus(orders, "new").length;
@@ -107,7 +108,7 @@ export function getTimeUntilDelivery(deliveryTime: string): number {
   // Extract time from delivery time string like "30分钟内(19:45前)送达"
   const timeMatch = deliveryTime.match(/(\d+)分钟内/);
   if (timeMatch) {
-    return parseInt(timeMatch[1]);
+    return parseInt(timeMatch[1]!);
   }
   return 30; // default 30 minutes
 }

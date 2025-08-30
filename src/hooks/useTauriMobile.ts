@@ -1,10 +1,11 @@
-import {useState, useCallback, useEffect} from "react";
-import { invoke} from "@tauri-apps/api/core";
+import { invoke } from "@tauri-apps/api/core";
+import { useCallback, useEffect, useState } from "react";
+// import {ping} from "tauri-plugin-txmap-api";
+// import {fetch} from "@tauri-apps/plugin-http";
 // import {isPermissionGranted, requestPermission, sendNotification} from "@tauri-apps/plugin-notification"
 // import { writeTextFile, BaseDirectory } from "@tauri-apps/plugin-fs"
 // import {type Position, watchPosition} from "@tauri-apps/plugin-geolocation";
 // import {takePicture }  from "@tauri-apps/plugin-camera"
-
 
 // When using the Tauri global script (if not using the npm package)
 // Be sure to set `app.withGlobalTauri` in `tauri.conf.json` to true
@@ -49,11 +50,9 @@ export interface DeliverySettings {
 
 export function useTauriMobile() {
   const [orders, setOrders] = useState<TauriDeliveryOrder[]>([]);
-  const [currentLocation, ] = useState<LocationData | null>(
-    null,
-  );
-  const [isWorking, ] = useState(false);
-  const [settings, ] = useState<DeliverySettings>({
+  const [currentLocation] = useState<LocationData | null>(null);
+  const [isWorking] = useState(false);
+  const [settings] = useState<DeliverySettings>({
     auto_accept_orders: false,
     min_order_value: 10.0,
     max_delivery_distance: 5000.0,
@@ -74,8 +73,14 @@ export function useTauriMobile() {
   }, []);
 
   useEffect(() => {
-      invoke('auth_init').then((message: string | unknown) => console.log(message));
-  }, [])
+    // console.log("----------------------------------------", invoke);
+    // console.log("----------------------------------------", Channel);
+    // ping("aaaaaaaaaaaaaaaaaaaaaaaa")
+    // invoke('plugin:txmap|ping', {value: "abcdefghijk"}).then((message: string | unknown) => console.log(message))
+    // invoke("auth_init").then((message: string | unknown) =>
+    //   console.log("auth_init", message),
+    // );
+  }, []);
 
   return {
     // State
@@ -83,21 +88,7 @@ export function useTauriMobile() {
     currentLocation,
     isWorking,
     settings,
-    // isLocationWatching,
 
-    // Actions
     loadOrders,
-    // acceptOrder,
-    // updateOrderStatus,
-    // toggleWorkStatus,
-    // getCurrentLocationData,
-    // startLocationTracking,
-    // stopLocationTracking,
-    // takeDeliveryPhoto,
-    // sendMobileNotification,
-    // calculateDistance,
-    // loadSettings,
-    // saveSettings,
-    // exportData,
   };
 }

@@ -1,9 +1,10 @@
-import type { TauriDeliveryOrder, LocationData } from "../types/tauri";
+import type { LocationData, TauriDeliveryOrder } from "../types/tauri";
 
 // Mobile platform detection
 export function isMobile(): boolean {
   return (
-    typeof window !== "undefined" && (window as import('../types/tauri').TauriWindow).__TAURI__ !== undefined
+    typeof window !== "undefined" &&
+    (window as import("../types/tauri").TauriWindow).__TAURI__ !== undefined
   );
 }
 
@@ -27,9 +28,9 @@ export function calculateTotalDistance(order: TauriDeliveryOrder): number {
 export function formatDeliveryTime(timeString: string): string {
   // Extract time from strings like "30分钟内(19:45前)送达"
   const timeMatch = timeString.match(/(\d+)分钟内/);
-  if (timeMatch && timeMatch[1]) {
+  if (timeMatch?.[1]) {
     const minutes = parseInt(timeMatch[1], 10);
-    if (!isNaN(minutes)) {
+    if (!Number.isNaN(minutes)) {
       return `${minutes}分钟内`;
     }
   }
@@ -38,9 +39,9 @@ export function formatDeliveryTime(timeString: string): string {
 
 export function getTimeUntilDelivery(deliveryTime: string): number {
   const timeMatch = deliveryTime.match(/(\d+)分钟内/);
-  if (timeMatch && timeMatch[1]) {
+  if (timeMatch?.[1]) {
     const minutes = parseInt(timeMatch[1], 10);
-    if (!isNaN(minutes)) {
+    if (!Number.isNaN(minutes)) {
       return minutes;
     }
   }
@@ -56,17 +57,22 @@ export function isWithinWorkingHours(
 
   const startParts = startTime.split(":");
   const endParts = endTime.split(":");
-  
+
   if (startParts.length !== 2 || endParts.length !== 2) {
     return false;
   }
 
-  const startHour = parseInt(startParts[0], 10);
-  const startMin = parseInt(startParts[1], 10);
-  const endHour = parseInt(endParts[0], 10);
-  const endMin = parseInt(endParts[1], 10);
+  const startHour = parseInt(startParts[0]!, 10);
+  const startMin = parseInt(startParts[1]!, 10);
+  const endHour = parseInt(endParts[0]!, 10);
+  const endMin = parseInt(endParts[1]!, 10);
 
-  if (isNaN(startHour) || isNaN(startMin) || isNaN(endHour) || isNaN(endMin)) {
+  if (
+    Number.isNaN(startHour) ||
+    Number.isNaN(startMin) ||
+    Number.isNaN(endHour) ||
+    Number.isNaN(endMin)
+  ) {
     return false;
   }
 
@@ -150,7 +156,11 @@ export function sortOrdersByEarnings(
 export function sortOrdersByPriority(
   orders: TauriDeliveryOrder[],
 ): TauriDeliveryOrder[] {
-  const priorityOrder: Record<TauriDeliveryOrder["priority"], number> = { High: 3, Medium: 2, Low: 1 };
+  const priorityOrder: Record<TauriDeliveryOrder["priority"], number> = {
+    High: 3,
+    Medium: 2,
+    Low: 1,
+  };
   return [...orders].sort(
     (a, b) => priorityOrder[b.priority] - priorityOrder[a.priority],
   );
@@ -243,7 +253,9 @@ export function throttle<T extends (...args: unknown[]) => unknown>(
     if (!inThrottle) {
       func(...args);
       inThrottle = true;
-      setTimeout(() => (inThrottle = false), limit);
+      setTimeout(() => {
+        inThrottle = false;
+      }, limit);
     }
   };
 }
@@ -276,13 +288,13 @@ export function handleAppResume(): void {
 // Battery optimization
 export function isBatteryOptimizationEnabled(): boolean {
   // Check if battery optimization might affect location tracking
-  const nav = navigator as import('../types/tauri').ExtendedNavigator;
+  const nav = navigator as import("../types/tauri").ExtendedNavigator;
   return nav.getBattery !== undefined;
 }
 
 export async function getBatteryLevel(): Promise<number> {
   try {
-    const nav = navigator as import('../types/tauri').ExtendedNavigator;
+    const nav = navigator as import("../types/tauri").ExtendedNavigator;
     if (nav.getBattery) {
       const battery = await nav.getBattery();
       return battery.level * 100;
@@ -299,8 +311,9 @@ export function isOnline(): boolean {
 }
 
 export function getNetworkType(): string {
-  const nav = navigator as import('../types/tauri').ExtendedNavigator;
-  const connection = nav.connection || nav.mozConnection || nav.webkitConnection;
+  const nav = navigator as import("../types/tauri").ExtendedNavigator;
+  const connection =
+    nav.connection || nav.mozConnection || nav.webkitConnection;
   return connection?.effectiveType || "unknown";
 }
 

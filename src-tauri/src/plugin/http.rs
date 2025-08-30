@@ -19,7 +19,7 @@ use tauri_plugin_http::reqwest;
 use tauri_plugin_http::reqwest::header::{HeaderMap, HeaderValue, AUTHORIZATION};
 use tauri_plugin_http::reqwest::{Client, Response, Url};
 
-pub const END_POINT_URL: &str = "http://127.0.0.1:3000";
+pub const END_POINT_URL: &str = "http://192.168.10.107:3000";
 
 pub fn q(base_url: Url, path: &str) -> Url {
   base_url.join(path).expect(

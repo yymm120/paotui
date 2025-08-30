@@ -1,6 +1,6 @@
 // Utility Types for Enterprise Compliance
 
-import type { DeliveryOrder } from './delivery';
+// import type { DeliveryOrder } from './delivery';
 
 // Utility function return types
 export type FilterFunction<T> = (items: T[], criteria: string) => T[];
@@ -9,10 +9,14 @@ export type ValidatorFunction<T> = (value: T) => boolean;
 export type TransformFunction<T, U> = (input: T) => U;
 
 // Delivery utility types
-export type DeliveryOrderStatus = DeliveryOrder['status'];
-export type DeliveryOrderPriority = DeliveryOrder['priority'];
-export type DeliveryFilterType = 'comprehensive' | 'distance' | 'earnings' | 'time';
-export type DeliveryTabType = 'new-tasks' | 'pickup' | 'delivery';
+// export type DeliveryOrderStatus = DeliveryOrder['status'];
+// export type DeliveryOrderPriority = DeliveryOrder['priority'];
+export type DeliveryFilterType =
+  | "comprehensive"
+  | "distance"
+  | "earnings"
+  | "time";
+export type DeliveryTabType = "new-tasks" | "pickup" | "delivery";
 
 // Location and distance types
 export interface Coordinates {
@@ -24,18 +28,18 @@ export interface DistanceCalculation {
   from: Coordinates;
   to: Coordinates;
   distance: number;
-  unit: 'meters' | 'kilometers';
+  unit: "meters" | "kilometers";
 }
 
 // Time and duration types
 export interface TimeRange {
   start: string; // HH:MM format
-  end: string;   // HH:MM format
+  end: string; // HH:MM format
 }
 
 export interface Duration {
   value: number;
-  unit: 'minutes' | 'hours' | 'days';
+  unit: "minutes" | "hours" | "days";
 }
 
 // Validation result types
@@ -63,12 +67,12 @@ export interface FormatOptions {
 }
 
 export interface DistanceFormatOptions extends FormatOptions {
-  unit?: 'auto' | 'meters' | 'kilometers';
+  unit?: "auto" | "meters" | "kilometers";
   showUnit?: boolean;
 }
 
 export interface TimeFormatOptions extends FormatOptions {
-  format?: '12h' | '24h';
+  format?: "12h" | "24h";
   showSeconds?: boolean;
 }
 
@@ -99,8 +103,8 @@ export interface ExportData {
 }
 
 // Network and connectivity types
-export type NetworkType = '2g' | '3g' | '4g' | 'slow-2g' | 'wifi' | 'unknown';
-export type ConnectionStatus = 'online' | 'offline' | 'poor';
+export type NetworkType = "2g" | "3g" | "4g" | "slow-2g" | "wifi" | "unknown";
+export type ConnectionStatus = "online" | "offline" | "poor";
 
 export interface NetworkStatus {
   isOnline: boolean;
@@ -123,8 +127,8 @@ export type ErrorHandler = (error: AppError) => void;
 export type AsyncErrorHandler = (error: AppError) => Promise<void>;
 
 // Notification types
-export type NotificationType = 'info' | 'success' | 'warning' | 'error';
-export type NotificationPriority = 'low' | 'normal' | 'high' | 'urgent';
+export type NotificationType = "info" | "success" | "warning" | "error";
+export type NotificationPriority = "low" | "normal" | "high" | "urgent";
 
 export interface NotificationOptions {
   title: string;
@@ -158,7 +162,7 @@ export interface PhotoMetadata {
   location?: Coordinates;
 }
 
-// Async operation types
+// Async db types
 export type AsyncOperation<T> = Promise<T>;
 export type AsyncCallback<T> = (result: T) => Promise<void>;
 export type ErrorCallback = (error: Error) => void;

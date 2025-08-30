@@ -1,0 +1,5 @@
+logLevel = "debug" # "debug" | "warn" | "error"
+[console]
+depth = 3
+[serve.static]
+plugins = ["bun-plugin-tailwind"]

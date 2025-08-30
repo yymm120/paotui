@@ -1,8 +1,9 @@
 [env]
-RUST_LOG = "debug"  # 默认
+RUST_LOG="debug"  # 默认
+CARGO_CONFIG_DIR=".cargo/"
 
 [run]
-env = { RUST_LOG = "debug" }  # 仅对 `cargo run` 生效
+env = { RUST_LOG="debug" }  # 仅对 `cargo run` 生效
 
 [test]
 env = { RUST_LOG = "trace" }  # 仅对 `cargo test` 生效

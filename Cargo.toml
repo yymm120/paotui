@@ -1,5 +1,11 @@
 [workspace]
 resolver = "2"
 
-members = ["src-tauri", "src-axum", "examples/*"]
-exclude = ["examples/JSAPI_React_Hooks"]
+members = [
+  "src-tauri",
+  "src-axum",
+  "plugins/*",
+  "examples/load_balancer"
+#  "examples/*"
+]
+exclude = ["examples/JSAPI_React_Hooks", "examples/cesium"]

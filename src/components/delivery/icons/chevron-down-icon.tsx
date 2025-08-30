@@ -1,11 +1,13 @@
 interface ChevronDownIconProps {
   className?: string;
   stroke?: string;
+  strokeWidth?: number | string;
 }
 
 export function ChevronDownIcon({
   className,
   stroke = "white",
+  strokeWidth = 1.5,
 }: ChevronDownIconProps) {
   return (
     <svg
@@ -20,7 +22,7 @@ export function ChevronDownIcon({
       <path
         d="M3 4.5L6 7.5L9 4.5"
         stroke={stroke}
-        strokeWidth="1.8"
+        strokeWidth={strokeWidth}
         strokeLinecap="round"
         strokeLinejoin="round"
       />

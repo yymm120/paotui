@@ -1,3 +1,4 @@
+use crate::model::pg::error::QueryError;
 use crate::utils::error::ToolError;
 use axum::http;
 use axum::http::StatusCode;
@@ -24,6 +25,15 @@ pub enum ServiceError {
   // UuidError(Uuid::),
   #[error("认证失败! {0}")]
   UnauthorizedError(&'static str),
+
+  #[error("Deduction failed!")]
+  PaymentDeductionFailed(&'static str),
+
+  #[error("DB db failed! {0}")]
+  DBOperationFailed(String),
+
+  #[error(transparent)]
+  QueryError(#[from] QueryError),
 }
 // impl From<Uuid::Error> for ServiceError {
 //   fn from(val: Uuid::Error) -> Self {

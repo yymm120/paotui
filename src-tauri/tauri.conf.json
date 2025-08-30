@@ -4,12 +4,12 @@
   "version": "1.0.0",
   "identifier": "com.paotui.delivery",
   "build": {
-    "beforeDevCommand": "pnpm run dev",
-    "beforeBuildCommand": "pnpm run build",
-    "devUrl": "http://127.0.0.1:5173",
+    "beforeBuildCommand": "bun run build",
+    "devUrl": "http://192.168.10.107:5173",
     "frontendDist": "../dist"
   },
   "app": {
+    "withGlobalTauri": true,
     "windows": [
       {
         "title": "Paotui Delivery",
@@ -46,7 +46,6 @@
     "android": {
       "minSdkVersion": 21,
       "versionCode": 1
-
     }
   },
   "plugins": {
@@ -55,7 +54,6 @@
     },
     "fs": {
       "requireLiteralLeadingDot": false
-
     }
   }
 }

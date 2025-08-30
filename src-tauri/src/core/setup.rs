@@ -16,9 +16,10 @@ pub struct AppData {
 }
 
 pub fn setup_for_initial(app: &mut tauri::App) -> Result<()> {
-
   log::info!("============= Setting up initial ===============");
-  let store = app.store("store.json").expect("Store initial setup failure");
+  let store = app
+    .store("store.json")
+    .expect("Store initial setup failure");
   let token = store.get("token").unwrap_or(Value::default()).to_string();
   store.close_resource();
 
@@ -27,9 +28,7 @@ pub fn setup_for_initial(app: &mut tauri::App) -> Result<()> {
   // case2: 服务端就绪, 当前token无效, 根据response存储新token, 打开登录页面
   // case3: 服务端就绪, 当前token有效, 打开应用
 
-  app.manage(Mutex::new(AppData {
-    token,
-  }));
+  app.manage(Mutex::new(AppData { token }));
   log::info!("state initialized");
 
   Ok(())

@@ -1,11 +1,12 @@
 #![allow(unused)]
 
+use crate::model::jwt::{Claims, ClaimsUser};
+use crate::model::table::user::User;
+use crate::utils::jwt::{generate_claims, generate_token, update_exp_and_iat};
 use chrono::Local;
-use crate::model::jwt::Claims;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-use crate::model::table::user_table::UserTable;
-use crate::utils::jwt::{generate_claims, generate_token, update_exp_and_iat};
+use crate::model::table::delivery_person::ProfileStatus;
 
 /// ### 用户信息
 #[derive(Debug, Clone, Deserialize, Serialize, Default)]
@@ -17,6 +18,7 @@ pub struct Profile {
   pub token: String,
   pub claims: Claims,
   pub delivery_info: DeliveryInfo,
+  pub status: ProfileStatus,
 }
 
 /// 运输信息
@@ -74,7 +76,7 @@ pub struct UserInfoForAutoLogin {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct User {
+pub struct UserInfo {
   pub user_id: String,
   pub user_type: UserType,
   pub phone_number: String,
@@ -82,14 +84,14 @@ pub struct User {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct ResponseForInitial {
   pub status: bool,
-  pub user: User,
+  pub user: UserInfo,
 }
 
 impl ResponseForInitial {
-  pub fn login_success_response(user: User) -> ResponseForInitial {
+  pub fn login_success_response(user: UserInfo) -> ResponseForInitial {
     ResponseForInitial { status: true, user }
   }
-  pub fn login_failed_response(user: User) -> ResponseForInitial {
+  pub fn login_failed_response(user: UserInfo) -> ResponseForInitial {
     ResponseForInitial {
       status: false,
       user,
@@ -98,7 +100,7 @@ impl ResponseForInitial {
 }
 
 impl core::fmt::Display for UserType {
-  fn fmt(&self, fmt: &mut core::fmt::Formatter) -> core::result::Result<(), core::fmt::Error> {
+  fn fmt(&self, fmt: &mut core::fmt::Formatter) -> Result<(), core::fmt::Error> {
     write!(fmt, "{self:?}")
   }
 }
@@ -108,10 +110,7 @@ impl Profile {
     Profile::default()
   }
   /// 创建一个`Profile`
-  pub fn create_profile(
-    user_type: UserType,
-    user_item: Option<UserTable>
-  ) -> Profile {
+  pub fn create_profile(user_type: UserType, user_item: Option<ClaimsUser>) -> Profile {
     let mut token = "".to_string();
     let mut claims = Claims::default();
 
@@ -132,11 +131,12 @@ impl Profile {
     Profile {
       user_type,
       user_id: claims.sub.clone(),
-      user_name: "".to_string(),
+      user_name: claims.username.clone(),
       user_phone: claims.phone.clone().into(),
       token: token.into(),
       claims,
       delivery_info: Default::default(),
+      status: Default::default(),
     }
   }
   // pub fn update_profile(profile: Profile) ->

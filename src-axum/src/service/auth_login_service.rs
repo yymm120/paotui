@@ -1,7 +1,7 @@
 use crate::AppState;
 use crate::model::auth::{Profile, RequestBodyForLogin, ResponseForLogin, UserType};
-use crate::model::table::user_table::UserTable;
-use crate::query::query_user::{create_user, query_user_by_phone};
+use crate::model::pg::user::{UserForCreate, User};
+use crate::model::pg::user::{insert};
 use crate::service::{
   common::verify_login_code,
   error::{Result, ServiceError},
@@ -15,10 +15,22 @@ use axum::{Extension, Json, http};
 use sqlx::Error;
 use std::str::FromStr;
 use std::sync::{Arc, Mutex};
-use tracing::instrument;
+use fake::Fake;
+use fake::faker::name::zh_cn::Name;
+use fake::locales::ZH_CN;
+use bigdecimal::Decimal;
+use tracing::{debug, instrument};
 use uuid::Uuid;
+use crate::model::app_state::AppIdentify;
+use crate::model::jwt::ClaimsUser;
+use crate::model::pg::customer_person_table::CustomerPersonTable;
+use crate::model::pg::delivery_app_user::CreateDeliveryAppUser;
+use crate::model::pg::delivery_person::CreateDeliveryPerson;
+use crate::model::pg::delivery_app_user::{create_delivery_app_user, query_delivery_app_user_by_phone};
+use crate::model::pg::delivery_person::create_delivery_person;
+use crate::utils::time::now_time;
 
-#[instrument]
+// #[instrument]
 pub async fn login(
   header_map: HeaderMap<HeaderValue>,
   profile: Arc<Mutex<Profile>>,
@@ -36,7 +48,6 @@ pub async fn login(
     token = profile_guard.token.clone();
     user_type = profile_guard.user_type.clone();
   }
-  println!("user type: {}", user_type);
 
   // 检查用户类型
   match profile_clone.user_type {
@@ -45,42 +56,56 @@ pub async fn login(
     // 检查短信验证码, 创建用户
     UserType::UnsignedUpUser | UserType::UnSignedInUser => {
       let user_phone = login_body.user_phone;
-      let exist_user = query_user_by_phone(&db, user_phone.clone()).await;
+      let exist_user = query_delivery_app_user_by_phone(&db, user_phone.clone()).await;
       match exist_user {
         // 果然存在, 这是未登录用户, 现在需要登录
-        Some(user_item) => {
-          println!("user type: {}", user_type);
+        Ok(user_item) => {
           let status = verify_login_code(user_phone.as_str(), code.as_str())
             .await
             .unwrap_or(false);
-          println!("status: {}", status);
           match status {
             true => {
-              let claims = generate_claims(UserType::VerifiedUser, Some(user_item));
-              let token = generate_token(UserType::VerifiedUser, claims)?;
+
+              let claims = generate_claims(UserType::VerifiedUser, Some(ClaimsUser::from(user_item.clone())));
+              let token = generate_token(UserType::VerifiedUser, claims.clone())?;
+
               {
                 let mut profile = profile.lock().unwrap();
-                profile.token = token.clone();
+                profile.user_id = user_item.user_id.to_string();
+                profile.user_phone = user_phone;
+                profile.claims = claims;
+                profile.token = token;
                 profile.user_type = UserType::VerifiedUser;
               }
+
               Ok(Json::from(ResponseForLogin { status: true }))
             }
             false => Err(ServiceError::UnauthorizedError("验证码错误!")),
           }
         }
-        None => {
+        Err(e) => {
           let status = verify_login_code(user_phone.as_str(), code.as_str())
             .await
             .unwrap_or(false);
           match status {
             true => {
-              let new_user_item =
-                create_user(&db, profile_clone.user_id.clone(), user_phone.clone()).await?;
-              let claims = generate_claims(UserType::VerifiedUser, Some(new_user_item));
-              let token = generate_token(UserType::VerifiedUser, claims)?;
+              let new_user_item = create_delivery_app_user(&db, CreateDeliveryAppUser {
+                username: format!("Random-{:?}", Name().fake::<String>()),  // 随机
+                password: "123456".to_string(), // 默认
+                telephone: user_phone,
+                money: Default::default(),
+                status: "resting".to_string(),
+              }).await?;
+
+              let claims = generate_claims(UserType::VerifiedUser, Some(ClaimsUser::from(new_user_item.clone())));
+              let token = generate_token(UserType::VerifiedUser, claims.clone())?;
               {
                 let mut profile = profile.lock().unwrap();
-                profile.token = token.clone();
+                profile.user_phone = new_user_item.telephone;
+                profile.user_id = new_user_item.user_id.to_string();
+                profile.user_type = UserType::VerifiedUser;
+                profile.claims = claims.clone();
+                profile.token = token;
               }
               Ok(Json::from(ResponseForLogin { status: true }))
             }
@@ -88,90 +113,28 @@ pub async fn login(
           }
         }
       }
-    } // // 检查短信验证码, 修改exp
-      // UserType::UnSignedInUser => {
-      //   // 未登录是根据token来检查的, 最终要回到用户输入的手机号来检查, 所以这里需要再次检查
-      //   let user_item_op = query_user_by_phone(&db, login_body.user_phone).await;
-      //
-      //   // 如果手机号在数据库中能找到, 才能说明这是未登录用户
-      //   match user_item_op {
-      //     Some(user_item) => {
-      //       // 找到了该用户, 的确是未登录用户
-      //       // 真正的user_id, 也需要以数据库中的user_id为准, 所以middleware中生成的claims需要更新
-      //       let claims = generate_claims(UserType::UnSignedInUser, Some(user_item)).expect("只要user_item存在, 这里不可能出错.");
-      //       // 然后修改profile中的user_id和user_phone
-      //       profile.user_id = claims.sub;
-      //       profile.user_phone = claims.phone;
-      //       profile.user_type = UserType::UnSignedInUser;
-      //       let token = generate_token(UserType::UnSignedInUser, &Some(claims.clone()));
-      //       profile.token = "a".to_string(); // 过期时间需要清空, 才能表示该用户还没有登录
-      //
-      //       match login_unsigned_in_user(user_item, token, &db, code.as_str()).await {
-      //         Ok(res) => {
-      //           profile.user_type = UserType::VerifiedUser;
-      //           Ok(res)
-      //         }
-      //         Err(e) => {
-      //           profile.user_type = UserType::UnSignedInUser;
-      //           Err(e)
-      //         }
-      //       }
-      //     }
-      //     None => {
-      //       match login_unsigned_up_user(user_item, token, &db, code.as_str()).await {
-      //         Ok(res) => {
-      //           profile.user_type = UserType::VerifiedUser;
-      //           Ok(res)
-      //         }
-      //         Err(e) => {
-      //           profile.user_type = UserType::UnSignedInUser;
-      //           Err(e)
-      //         }
-      //       }
-      //     }
-      //   }
-
-      // 然后开始校验登录验证码
-      // let status = verify_login_code(code.as_str());
-      // generate_jwt()
-
-      // let response = login_unsigned_user(user_item, profile, &db, code.as_str());
-      // if (code == "1234") {
-      //   // 验证码正确
-      //   Ok(Response::builder()
-      //     .status(StatusCode::OK)
-      //     .header(AUTHORIZATION, token)
-      //     .header("Content-Type", "application/json")
-      //     .body::<ResponseForLogin>(ResponseForLogin { status: false })?)
-      // } else {
-      //   Ok(Response::builder()
-      //     .status(StatusCode::OK)
-      //     .header(AUTHORIZATION, token)
-      //     .header("Content-Type", "application/json")
-      //     .body::<ResponseForLogin>(ResponseForLogin { status: false })?)
-      // }
-      // }
+    }
   }
 }
 
 async fn login_unsigned_in_user(
-  user_item: UserTable,
+  user_item: User,
   token: String,
   db: &Db,
   code: &str,
 ) -> Result<Json<ResponseForLogin>> {
   // 校验登录验证码
-  let status = verify_login_code(user_item.user_phone.as_str(), code).await;
+  let status = verify_login_code(user_item.telephone.as_str(), code).await;
   match status.unwrap_or(false) {
     // 验证码正确
     true => {
-      let claims = generate_claims(UserType::VerifiedUser, Some(user_item));
+      let claims = generate_claims(UserType::VerifiedUser, Some(ClaimsUser::from(user_item)));
       let token = generate_token(UserType::VerifiedUser, claims)?;
       Ok(Json::from(ResponseForLogin { status: false }))
     }
     // 验证码错误
     false => {
-      let claims = generate_claims(UserType::UnSignedInUser, Some(user_item));
+      let claims = generate_claims(UserType::UnSignedInUser, Some(ClaimsUser::from(user_item)));
       let token = generate_token(UserType::UnSignedInUser, claims)?;
       Ok(Json::from(ResponseForLogin { status: false }))
     }
@@ -188,7 +151,7 @@ async fn login_unsigned_in_user(
 // }
 
 async fn login_unsigned_up_user(
-  user_item: UserTable,
+  user_item: User,
   token: String,
   db: &Db,
   code: &str,

@@ -1,19 +1,29 @@
+import {
+  BottomFooter,
+  DeliveryAppHeader,
+  MainForDeliveryTask,
+} from "@/components/delivery";
 import { cn } from "@/lib/utils";
-import { DeliveryAppHeader } from "./DeliveryAppHeader";
-import { NavigationTabs } from "./NavigationTabs";
-import { FilterSection } from "./FilterSection";
-import { DeliveryCardList } from "./DeliveryCardList";
-import { BottomFooter } from "./BottomFooter";
-import type {DeliveryOrder} from "@/types";
-import {mockDeliveryOrders} from "@/data/mockDeliveryOrders.ts";
+// import { DeliveryAppHeader } from "./DeliveryAppHeader";
+// import { NavigationTabs } from "./NavigationTabs";
+// import { FilterSection } from "./FilterSection";
+// import { DeliveryCardList } from "./DeliveryCardList";
+// import { BottomFooter } from "./BottomFooter";
+import type { DeliveryTask } from "@/types";
+import { Button } from "@/components/ui/button.tsx";
 
-interface DeliveryAppLayoutProps {
+// import {mockDeliveryOrders} from "@/data/mockDeliveryOrders.ts";
+
+export interface DeliveryAppLayoutProps {
   className?: string;
-  orders?: DeliveryOrder[];
+  orders?: DeliveryTask[];
   activeTab?: string;
   isWorking?: boolean;
   status?: string;
   filterLabel?: string;
+}
+
+export interface DeliveryAppLayoutEvents {
   onMenuClick?: () => void;
   onStatusClick?: () => void;
   onNotificationClick?: () => void;
@@ -63,56 +73,65 @@ interface DeliveryAppLayoutProps {
 //   },
 // ];
 
-export function DeliveryAppLayout({
-  className,
-  orders = mockDeliveryOrders,
-  activeTab = "new-tasks",
-  isWorking = false,
-  status = "已收工",
-  filterLabel = "综合排序",
-  onMenuClick,
-  onStatusClick,
-  onNotificationClick,
-  onTabChange,
-  onFilterClick,
-  onAcceptOrder,
-  onToggleWork,
-  onSettingsClick,
-}: DeliveryAppLayoutProps) {
+import {
+  createContext,
+  type Dispatch,
+  type SetStateAction,
+  useContext,
+} from "react";
+import { AppContext } from "@/components/app-context.tsx";
+
+export const ViewStatusContext = createContext<{
+  viewStatus: number;
+  setViewStatus: Dispatch<SetStateAction<number>>;
+} | null>(null);
+export function DeliveryAppLayout({ className }: DeliveryAppLayoutProps) {
+  const appContext = useContext(AppContext);
+  const {
+    states: {
+      taskAddress: [taskAddress],
+    },
+    features: {
+      location: {
+        location: [currentLocation],
+        watchTriggerOfLocation: [_, setWatchLocation],
+      },
+      map,
+    },
+  } = appContext;
+  const startWatch = async () => {
+    setWatchLocation(true);
+  };
+  const clearWatch = async () => {
+    setWatchLocation(false);
+  };
+
   return (
-    <div className={cn("flex h-screen w-full flex-col", className)}>
+    <div className={cn("flex w-full flex-col", className)}>
       {/* Fixed Header */}
-      <DeliveryAppHeader
-        onMenuClick={onMenuClick}
-        onStatusClick={onStatusClick}
-        onNotificationClick={onNotificationClick}
-        status={status}
-      />
-
-      {/* Navigation Tabs - Part of Header */}
-      <div className="fixed top-12 left-0 z-[999] w-full sm:top-[46px]">
-        <NavigationTabs activeTab={activeTab} onTabChange={onTabChange} />
+      <DeliveryAppHeader className={"fixed top-0 left-0 h-12"} />
+      <div id={"debug"} className={"fixed z-10000 top-1/7 left-0"}>
+        <div className={"flex flex-col gap-1"}>
+          <Button onClick={startWatch}>监听GPS</Button>
+          <Button onClick={clearWatch}>取消监听</Button>
+          <Button onClick={clearWatch}>画线</Button>
+        </div>
+      </div>
+      <div id={"debug-info"} className={" fixed z-10000 top-1/8 left-1/5"}>
+        <div>
+          location: {currentLocation.coords.latitude}
+          {currentLocation.coords.longitude}
+        </div>
+        {/*taskAddress:{JSON.stringify(taskAddress)}*/}
+        map:{JSON.stringify(map?.toString())}
       </div>
 
-      {/* Filter Section - Part of Header */}
-      <div className="fixed top-24 left-0 z-[999] w-full sm:top-[94px]">
-        <FilterSection
-          filterLabel={filterLabel}
-          onFilterClick={onFilterClick}
-        />
-      </div>
-
-      {/* Main Content Area */}
-      <main className="mt-36 mb-20 min-h-[calc(100vh-224px)] w-full sm:mt-[130px] sm:min-h-[calc(100vh-210px)]">
-        <DeliveryCardList orders={orders} onAcceptOrder={onAcceptOrder} />
-      </main>
-
-      {/* Fixed Bottom Footer */}
-      <BottomFooter
-        isWorking={isWorking}
-        onToggleWork={onToggleWork}
-        onSettingsClick={onSettingsClick}
+      {/*<Button>watchPosition</Button>*/}
+      <MainForDeliveryTask
+        className={"fixed top-12 h-[calc(100vh-var(--spacing)*32)]"}
       />
+
+      <BottomFooter className={"fixed bottom-0 left-0 h-20"} />
     </div>
   );
 }

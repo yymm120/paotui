@@ -7,7 +7,7 @@ pub mod db;
 pub mod error;
 pub mod jwt;
 pub mod runtime;
-mod time;
+pub mod time;
 
 pub fn tools() -> Router {
   Router::new().nest(

@@ -7,6 +7,10 @@ license = ""
 repository = ""
 edition = "2021"
 
+[profile.dev]
+debug = true  # 必须启用
+
+
 [package.metadata.tauri.bundle]
 identifier = "com.paotui.delivery"
 
@@ -30,9 +34,10 @@ serde_json = "1.0"
 tauri = { version = "2.2.0", features = [] }
 tauri-plugin-notification = "2"
 tauri-plugin-fs = "2.3.0"
-tauri-plugin-geolocation = "2.2.5"
+tauri-plugin-geolocation = "2.3"
 tauri-plugin-shell = "2.2.2"
 tauri-plugin-websocket = "2"
+tauri-plugin-txmap = { path = "../plugins/tauri-plugin-txmap"}
 
 tauri-plugin-http = { version = "2", features = ["json"] }
 tauri-plugin-store = "2"

@@ -1,7 +1,7 @@
 #![allow(unused)]
 use crate::model::auth::UserType;
-use crate::model::jwt::{Claims, DecodeData, EncodeData, ValidClaims};
-use crate::model::table::user_table::UserTable;
+use crate::model::jwt::{Claims, ClaimsUser, DecodeData, EncodeData, ValidClaims};
+use crate::model::table::user::User;
 use crate::utils::error::{Result, ToolError};
 use axum::Json;
 use axum::response::IntoResponse;
@@ -21,55 +21,60 @@ pub fn generate_token(user_type: UserType, claims: Claims) -> Result<String> {
 }
 
 #[instrument]
-pub fn generate_claims(user_type: UserType, user_item: Option<UserTable>) -> Claims {
-
+pub fn generate_claims(user_type: UserType, user_item: Option<ClaimsUser>) -> Claims {
   match user_type {
     UserType::VerifiedUser => {
       let user = user_item.expect("user must exist. user type is verified user.");
       generate_claims_for_verified_user(user)
-    },
+    }
     UserType::UnsignedUpUser => {
-      debug!("user type is unsigned up.");
+      // debug!("user type is unsigned up.");
       generate_claims_for_unsigned_up_user()
-    },
+    }
     UserType::UnSignedInUser => {
       let user = user_item.expect("user must exist. user type is unsigned in user.");
       generate_claims_for_unsigned_in_user(user)
-    },
+    }
   }
 }
 
-fn generate_claims_for_exist_user(user: UserTable) -> Claims {
+fn generate_claims_for_exist_user(user: ClaimsUser) -> Claims {
   generate_claims_for_unsigned_in_user(user)
 }
 
 fn generate_claims_for_unsigned_up_user() -> Claims {
   let invalid_exp = generate_invalid_exp();
   Claims {
-    sub: Uuid::new_v4().to_string(),
+    sub: Uuid::new_v4().to_string(), // uuid 用户都表明未注册, db中的用户id是i64类型
     exp: invalid_exp.exp,
     iat: invalid_exp.iat,
     phone: "".to_string(),
+    username: "guest_user".to_string(),
+    app_identify: "".to_string(),
   }
 }
 
-fn generate_claims_for_unsigned_in_user(user: UserTable) -> Claims {
+fn generate_claims_for_unsigned_in_user(user: ClaimsUser) -> Claims {
   let invalid_exp = generate_invalid_exp();
   Claims {
     sub: user.user_id.to_string(),
     exp: invalid_exp.exp,
     iat: invalid_exp.iat,
-    phone: user.user_phone.to_string(),
+    phone: user.telephone.to_string(),
+    username: user.username,
+    app_identify: "delivery".to_string(),
   }
 }
 
-fn generate_claims_for_verified_user(user: UserTable) -> Claims {
+fn generate_claims_for_verified_user(user: ClaimsUser) -> Claims {
   let valid_exp = generate_valid_exp();
   let claims = Claims {
     sub: user.user_id.to_string(),
     exp: valid_exp.exp,
     iat: valid_exp.iat,
-    phone: user.user_phone.to_string(),
+    phone: user.telephone.to_string(),
+    username: user.username,
+    app_identify: "delivery".to_string(),
   };
   claims
 }
@@ -88,6 +93,8 @@ fn generate_token_for_unsigned_up_user(claims: Claims) -> Result<String> {
     exp,
     iat,
     phone: claims.phone,
+    username: match claims.username == "" { true => "guest_user".to_string(), false => claims.username.clone()},
+    app_identify: "delivery".to_string(),
   };
   Ok(encode(
     &Header::default(),
@@ -112,6 +119,8 @@ fn generate_token_for_verified_user(claims: Claims) -> Result<String> {
     exp,
     iat,
     phone: claims.phone,
+    username: claims.username,
+    app_identify: "delivery".to_string(),
   };
   Ok(encode(
     &Header::default(),
@@ -144,7 +153,7 @@ pub async fn decode_handler(
 ) -> crate::utils::error::Result<Json<Claims>> {
   let key = b"your_secret_key";
 
-  debug!("{}", serde_json::to_string_pretty(&decode_data).unwrap());
+  // debug!("{}", serde_json::to_string_pretty(&decode_data).unwrap());
   // 基本jwt检查
   // 在 jsonwebtoken 库中，Validation 结构体用于配置 JWT 的验证规则
   let mut validation = Validation::new(Algorithm::HS256);
@@ -248,4 +257,3 @@ mod tests {
     //
   }
 }
-

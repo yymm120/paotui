@@ -1,5 +1,5 @@
 use sqlx::postgres::PgPoolOptions;
-use sqlx::{Pool, Postgres};
+use sqlx::{PgPool, Pool, Postgres, Transaction};
 use std::time::Duration;
 use tracing::info;
 

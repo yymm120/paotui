@@ -24,6 +24,7 @@ pub fn run() {
     .plugin(tauri_plugin_websocket::init())
     .plugin(tauri_plugin_shell::init())
     .plugin(tauri_plugin_notification::init())
+    .plugin(tauri_plugin_txmap::init())
     .plugin(tauri_plugin_fs::init())
     .plugin(tauri_plugin_geolocation::init())
     .setup(|app| {

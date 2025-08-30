@@ -41,51 +41,37 @@ pub enum ApiError {
 
   #[error(transparent)]
   AxumJsonRejection(#[from] JsonRejection),
+
+  #[error("用户id: {0} 未经授权, 无法访问!")]
+  Unauthorized(String)
 }
 
-// impl From<jsonwebtoken::errors::Error> for ApiError {
-//   fn from(val: jsonwebtoken::errors::Error) -> Self {
-//     ApiError::AuthTokenError(val)
-//   }
-// }
-//
-// impl From<sqlx::error::Error> for ApiError {
-//   fn from(val: sqlx::error::Error) -> Self {
-//     ApiError::DataBaseError(val)
-//   }
-// }
-
-// impl From<FormRejection> for ApiError {
-//   fn from(val: FormRejection) -> Self {
-//     ApiError::AxumFormRejection(val)
-//   }
-// }
-
-// impl Display for ApiError {
-//   fn fmt(&self, fmt: &mut Formatter) -> core::result::Result<(), core::fmt::Error> {
-//     write!(fmt, "{self:?}")
-//   }
-// }
 
 impl IntoResponse for ApiError {
   fn into_response(self) -> Response {
     debug!("{:<12} - model::Error {self:?}", "INTO_RES");
 
-    // Create a placeholder Axum response.
-    let mut response = StatusCode::INTERNAL_SERVER_ERROR.into_response();
+    // 根据错误类型返回不同的状态码和消息
+    let (status, message) = match self {
+      ApiError::ValidationError(err) => {
+        let msg = format!("Input validation error: {}", err);
+        (StatusCode::BAD_REQUEST, msg)
+      }
+      ApiError::AxumFormRejection(err) => {
+        (StatusCode::BAD_REQUEST, err.to_string())
+      }
+      ApiError::Unauthorized(err) => {
+        let msg = format!("用户id: {0} 未经授权, 无法访问!", err);
+        (StatusCode::UNAUTHORIZED, msg)
+      }
+      _ => {
+        (StatusCode::INTERNAL_SERVER_ERROR, "OOPS! 发生未知错误!".to_string())
+      }
+    };
 
-    // Insert the Error into the response.
+    // 创建响应并插入错误到扩展（如需后续处理）
+    let mut response = (status, message).into_response();
     // response.extensions_mut().insert(self);
-
-    // match self {
-    //   ApiError::ValidationError(_) => {
-    //     let message = format!("Input validation error: [{self}]").replace('\n', ", ");
-    //     (StatusCode::BAD_REQUEST, message)
-    //   }
-    //   ApiError::AxumFormRejection(_) => (StatusCode::BAD_REQUEST, self.to_string()),
-    // }
-    //   .into_response();
-
     response
   }
 }

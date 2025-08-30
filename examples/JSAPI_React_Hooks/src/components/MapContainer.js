@@ -1,6 +1,6 @@
+import AMapLoader from "@amap/amap-jsapi-loader";
 import { useEffect } from "react";
 import styles from "./MapContainer.css";
-import AMapLoader from "@amap/amap-jsapi-loader";
 
 export default function MapContainer() {
   let map = null;

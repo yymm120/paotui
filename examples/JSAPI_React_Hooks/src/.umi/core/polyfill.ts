@@ -197,5 +197,4 @@ import "/Users/simonwang/Documents/others/docs/react/node_modules/core-js/module
 import "/Users/simonwang/Documents/others/docs/react/node_modules/core-js/modules/web.immediate.js";
 import "/Users/simonwang/Documents/others/docs/react/node_modules/core-js/modules/web.self.js";
 import "/Users/simonwang/Documents/others/docs/react/node_modules/core-js/modules/web.structured-clone.js";
-import '/Users/simonwang/Documents/others/docs/react/node_modules/regenerator-runtime/runtime.js';
-export {};
+import "/Users/simonwang/Documents/others/docs/react/node_modules/regenerator-runtime/runtime.js";
