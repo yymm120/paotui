@@ -1,0 +1,46 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n    SELECT\n        u.user_id AS user_id,\n        u.username AS username,\n        u.telephone AS telephone,\n        dp.money AS money,\n        dp.status AS status\n    FROM public.delivery_app_user du\n    LEFT JOIN public.user u ON u.user_id = du.user_id\n    LEFT JOIN public.delivery_person dp ON du.delivery_person_id = dp.delivery_person_id\n    WHERE du.user_id = $1\n    ;",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "user_id",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 1,
+        "name": "username",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "telephone",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "money",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 4,
+        "name": "status",
+        "type_info": "Varchar"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int8"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "f71a86b0fb08a79c40683d69c8ba78fea739ac01163849e1dfc516f6cd240956"
+}

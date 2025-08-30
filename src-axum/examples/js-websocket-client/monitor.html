@@ -1,0 +1,154 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>在线用户监控</title>
+    <link rel="stylesheet" href="./monitor.css">
+
+</head>
+<body>
+<h1>在线用户监控面板</h1>
+
+<div class="panel">
+    <div class="controls">
+        <button id="connect-btn">连接监控服务</button>
+        <button id="refresh-btn">刷新列表</button>
+    </div>
+
+    <div class="stats">
+        <div class="stat-item">总用户数: <span id="total-users">0</span></div>
+        <div class="stat-item">活跃用户: <span id="active-users">0</span></div>
+        <div class="stat-item">更新时间: <span id="last-update">未更新</span></div>
+    </div>
+
+    <div class="online-users" id="online-users">
+        <!-- 用户卡片将在这里动态生成 -->
+        <div class="empty-message">尚未连接到监控服务</div>
+    </div>
+</div>
+
+<script>
+    let monitorSocket = null;
+    let onlineUsers = {};
+
+    // DOM元素
+    const connectBtn = document.getElementById('connect-btn');
+    const refreshBtn = document.getElementById('refresh-btn');
+    const onlineUsersContainer = document.getElementById('online-users');
+    const totalUsersSpan = document.getElementById('total-users');
+    const activeUsersSpan = document.getElementById('active-users');
+    const lastUpdateSpan = document.getElementById('last-update');
+
+    // 初始化
+    function init() {
+        connectBtn.addEventListener('click', toggleMonitorConnection);
+        refreshBtn.addEventListener('click', requestUserList);
+        refreshBtn.disabled = true;
+    }
+
+    // 切换监控连接
+    function toggleMonitorConnection() {
+        if (monitorSocket && monitorSocket.readyState === WebSocket.OPEN) {
+            monitorSocket.close();
+            return;
+        }
+
+        monitorSocket = new WebSocket(`wss://localhost:4000/monitor`);
+
+        monitorSocket.onopen = () => {
+            connectBtn.textContent = '断开连接';
+            refreshBtn.disabled = false;
+            updateStatus('已连接到监控服务', true);
+            requestUserList();
+        };
+
+        monitorSocket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+
+            if (data.type === 'user_list') {
+                onlineUsers = data.users.reduce((acc, user) => {
+                    acc[user.id] = user;
+                    return acc;
+                }, {});
+
+                renderUserList();
+                updateStats();
+            }
+            else if (data.type === 'user_joined') {
+                onlineUsers[data.user.id] = data.user;
+                renderUserList();
+                updateStats();
+            }
+            else if (data.type === 'user_left') {
+                delete onlineUsers[data.user_id];
+                renderUserList();
+                updateStats();
+            }
+        };
+
+        monitorSocket.onclose = () => {
+            connectBtn.textContent = '连接监控服务';
+            refreshBtn.disabled = true;
+            updateStatus('监控服务已断开', false);
+        };
+
+        monitorSocket.onerror = (error) => {
+            updateStatus(`监控错误: ${error.message}`, false);
+        };
+    }
+
+    // 请求用户列表
+    function requestUserList() {
+        if (monitorSocket && monitorSocket.readyState === WebSocket.OPEN) {
+            monitorSocket.send(JSON.stringify({ type: 'get_users' }));
+            updateStatus('正在获取用户列表...', true);
+        }
+    }
+
+    // 渲染用户列表
+    function renderUserList() {
+        if (Object.keys(onlineUsers).length === 0) {
+            onlineUsersContainer.innerHTML = '<div class="empty-message">当前没有在线用户</div>';
+            return;
+        }
+
+        onlineUsersContainer.innerHTML = '';
+
+        Object.values(onlineUsers).forEach(user => {
+            const userCard = document.createElement('div');
+            userCard.className = 'user-card';
+
+            const lastActive = new Date(user.last_active).toLocaleTimeString();
+            const connectTime = new Date(user.connect_time).toLocaleString();
+
+            userCard.innerHTML = `
+                <div class="user-id">${user.id}</div>
+                <div class="user-info">IP: ${user.ip || '未知'}</div>
+                <div class="user-info">连接时间: ${connectTime}</div>
+                <div class="user-info">最后活跃: ${lastActive}</div>
+            `;
+
+            onlineUsersContainer.appendChild(userCard);
+        });
+    }
+
+    // 更新统计信息
+    function updateStats() {
+        totalUsersSpan.textContent = Object.keys(onlineUsers).length;
+        activeUsersSpan.textContent = Object.values(onlineUsers)
+            .filter(user => Date.now() - new Date(user.last_active).getTime() < 30000)
+            .length;
+
+        lastUpdateSpan.textContent = new Date().toLocaleTimeString();
+    }
+
+    // 更新状态信息
+    function updateStatus(message, isConnected) {
+        console.log(message);
+    }
+
+    // 初始化应用
+    init();
+</script>
+</body>
+</html>

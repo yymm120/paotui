@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-fragment"
+description = "Enables the fragment command without any pre-configured scope."
+commands.allow = ["fragment"]
+
+[[permission]]
+identifier = "deny-fragment"
+description = "Denies the fragment command without any pre-configured scope."
+commands.deny = ["fragment"]

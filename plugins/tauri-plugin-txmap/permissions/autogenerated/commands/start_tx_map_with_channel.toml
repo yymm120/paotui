@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-start-tx-map-with-channel"
+description = "Enables the start_tx_map_with_channel command without any pre-configured scope."
+commands.allow = ["start_tx_map_with_channel"]
+
+[[permission]]
+identifier = "deny-start-tx-map-with-channel"
+description = "Denies the start_tx_map_with_channel command without any pre-configured scope."
+commands.deny = ["start_tx_map_with_channel"]

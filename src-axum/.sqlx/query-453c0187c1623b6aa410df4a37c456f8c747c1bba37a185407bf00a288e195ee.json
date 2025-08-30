@@ -1,0 +1,148 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n    INSERT INTO delivery_task (\n            /* 1 */ id,\n            /* 2 */ create_time,\n            /* 3 */ arrived_time,\n            /* 4 */ address_start_id,\n            /* 5 */ address_end_id,\n            /* 6 */ tag,\n            /* 7 */ items,\n            /* 8 */ note,\n            /* 9 */ status,\n            /* 10 */ priority,\n            /* 11 */ estimated_income,\n            /* 12 */ username_send,\n            /* 13 */ username_receive,\n            /* 14 */ username_delivery,\n            /* 15 */ telephone_send,\n            /* 16 */ telephone_receive,\n            /* 17 */ telephone_delivery,\n            /* 18 */ user_id_delivery_by,\n            /* 19 */ user_id_created_by\n        ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19)\n         RETURNING *;\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 1,
+        "name": "tag",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "items",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "note",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "status",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 5,
+        "name": "priority",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 6,
+        "name": "estimated_income",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 7,
+        "name": "username_send",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 8,
+        "name": "username_receive",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 9,
+        "name": "username_delivery",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 10,
+        "name": "address_start_id",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 11,
+        "name": "address_end_id",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 12,
+        "name": "user_id_created_by",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 13,
+        "name": "telephone_send",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 14,
+        "name": "telephone_receive",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 15,
+        "name": "telephone_delivery",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 16,
+        "name": "user_id_delivery_by",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 17,
+        "name": "create_time",
+        "type_info": "Timestamp"
+      },
+      {
+        "ordinal": 18,
+        "name": "arrived_time",
+        "type_info": "Timestamp"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Varchar",
+        "Timestamp",
+        "Timestamp",
+        "Int8",
+        "Int8",
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Varchar",
+        "Int8",
+        "Int8"
+      ]
+    },
+    "nullable": [
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      true
+    ]
+  },
+  "hash": "453c0187c1623b6aa410df4a37c456f8c747c1bba37a185407bf00a288e195ee"
+}

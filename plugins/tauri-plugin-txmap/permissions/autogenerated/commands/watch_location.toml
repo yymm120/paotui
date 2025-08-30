@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-watch-location"
+description = "Enables the watch_location command without any pre-configured scope."
+commands.allow = ["watch_location"]
+
+[[permission]]
+identifier = "deny-watch-location"
+description = "Denies the watch_location command without any pre-configured scope."
+commands.deny = ["watch_location"]

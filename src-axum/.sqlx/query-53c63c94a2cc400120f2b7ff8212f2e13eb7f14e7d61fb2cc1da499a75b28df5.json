@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n    DELETE FROM public.delivery_app_user WHERE user_id = $1 AND delivery_person_id = $2;\n  ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Int8",
+        "Int8"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "53c63c94a2cc400120f2b7ff8212f2e13eb7f14e7d61fb2cc1da499a75b28df5"
+}

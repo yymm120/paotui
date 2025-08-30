@@ -1,0 +1,42 @@
+pluginManagement {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+        google()
+        maven{
+            url = uri("https://oss.sonatype.org/content/groups/public/")
+        }
+        maven{
+            url = uri("https://oss.sonatype.org/content/repositories/snapshots/")
+        }
+    }
+    resolutionStrategy {
+        eachPlugin {
+            switch (requested.id.id) {
+                case "com.android.library":
+                    useVersion("8.0.2")
+                    break
+                case "org.jetbrains.kotlin.android":
+                    useVersion("1.8.20")
+                    break
+            }
+        }
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        mavenCentral()
+        google()
+        maven{
+            url = uri("https://oss.sonatype.org/content/groups/public/")
+        }
+        maven{
+            url = uri("https://oss.sonatype.org/content/repositories/snapshots/")
+        }
+    }
+}
+
+include ':tauri-android'
+project(':tauri-android').projectDir = new File('./.tauri/tauri-api')

@@ -1,0 +1,125 @@
+:root {
+    --text-color: #d0b375;
+    --bg-color: #1e1f22;
+    --border-color: #444;
+    --button-bg: #333;
+    --button-hover: #444;
+    --connected-color: #4CAF50;
+    --disconnected-color: #F44336;
+}
+
+body {
+    color: var(--text-color);
+    background: var(--bg-color);
+    font: 14px/1.5 sans-serif;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.panel {
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    background: #25262a;
+}
+
+.online-users {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.user-card {
+    border: 1px solid var(--border-color);
+    padding: 10px;
+    border-radius: 5px;
+    background: #2b2c30;
+    position: relative;
+}
+
+.user-card::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--connected-color);
+}
+
+.user-id {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #fff;
+}
+
+.user-info {
+    font-size: 12px;
+    color: #aaa;
+}
+
+.status {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.status.connected {
+    background: var(--connected-color);
+}
+
+.status.disconnected {
+    background: var(--disconnected-color);
+}
+
+.controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+button {
+    background: var(--button-bg);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: var(--button-hover);
+}
+
+#refresh-btn {
+    background: #2196F3;
+}
+
+#refresh-btn:hover {
+    background: #0b7dda;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.stat-item {
+    background: #333;
+    padding: 8px 12px;
+    border-radius: 4px;
+}

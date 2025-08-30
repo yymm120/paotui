@@ -1,0 +1,3 @@
+[default]
+description = "Default permissions for the plugin"
+permissions = ["allow-fragment", "allow-start-tx-map-with-channel", "allow-clear-task", "allow-clear-channel", "allow-add-task", "allow-watch-location", "allow-watch-direction", "allow-clear-watch-direction", "allow-clear-watch-location"]

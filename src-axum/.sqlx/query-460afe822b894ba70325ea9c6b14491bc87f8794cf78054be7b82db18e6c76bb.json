@@ -1,0 +1,130 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT * FROM delivery_task WHERE status = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 1,
+        "name": "tag",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 2,
+        "name": "items",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "note",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 4,
+        "name": "status",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 5,
+        "name": "priority",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 6,
+        "name": "estimated_income",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 7,
+        "name": "username_send",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 8,
+        "name": "username_receive",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 9,
+        "name": "username_delivery",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 10,
+        "name": "address_start_id",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 11,
+        "name": "address_end_id",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 12,
+        "name": "user_id_created_by",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 13,
+        "name": "telephone_send",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 14,
+        "name": "telephone_receive",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 15,
+        "name": "telephone_delivery",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 16,
+        "name": "user_id_delivery_by",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 17,
+        "name": "create_time",
+        "type_info": "Timestamp"
+      },
+      {
+        "ordinal": 18,
+        "name": "arrived_time",
+        "type_info": "Timestamp"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      true
+    ]
+  },
+  "hash": "460afe822b894ba70325ea9c6b14491bc87f8794cf78054be7b82db18e6c76bb"
+}

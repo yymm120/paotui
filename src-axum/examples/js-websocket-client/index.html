@@ -1,0 +1,200 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>WS多功能面板</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<div class="panel">
+    <h3>连接控制</h3>
+    <div>
+        <input id="user-id" type="text" placeholder="你的用户ID" value="client1">
+        <button id="conn-btn" onclick="toggleConnect()">连接</button>
+        <span id="conn-status"><span class="status disconnected"></span>未连接</span>
+    </div>
+</div>
+
+<div class="panel">
+    <h3>1. 用户私聊 (1对1)</h3>
+    <div>
+        <input id="private-user" type="text" placeholder="目标用户ID" value="user1">
+        <input id="private-msg" type="text" placeholder="消息" value="你好">
+        <button onclick="sendPrivate()">发送</button>
+    </div>
+</div>
+
+<div class="panel">
+    <h3>2. 用户群聊 (多对多)</h3>
+    <div>
+        <input id="group-id" type="text" placeholder="群组ID" value="group1">
+        <input id="group-msg" type="text" placeholder="消息" value="大家好">
+        <button onclick="sendGroup()">发送</button>
+    </div>
+</div>
+
+<div class="panel">
+    <h3>消息日志</h3>
+    <div class="user-tabs" id="user-tabs"></div>
+    <div class="log-container">
+        <div class="log" id="log-container"></div>
+    </div>
+</div>
+
+<script>
+    const sockets = {};
+    const logs = {};
+    let activeUserId = null;
+
+    // 初始化日志容器
+    function initLogs(userId) {
+        if (!logs[userId]) {
+            logs[userId] = [];
+        }
+        renderLogs();
+    }
+
+    // 渲染日志
+    function renderLogs() {
+        const logContainer = document.getElementById('log-container');
+        const userTabs = document.getElementById('user-tabs');
+
+        // 清空现有内容
+        logContainer.innerHTML = '';
+        userTabs.innerHTML = '';
+
+        // 如果没有活跃用户，选择第一个
+        if (!activeUserId && Object.keys(logs).length > 0) {
+            activeUserId = Object.keys(logs)[0];
+        }
+
+        // 创建用户标签
+        Object.keys(logs).forEach(userId => {
+            const tab = document.createElement('div');
+            tab.className = `user-tab ${userId === activeUserId ? 'active' : ''}`;
+            tab.textContent = userId;
+            tab.onclick = () => {
+                activeUserId = userId;
+                renderLogs();
+            };
+            userTabs.appendChild(tab);
+        });
+
+        // 显示当前活跃用户的日志
+        if (activeUserId && logs[activeUserId]) {
+            logs[activeUserId].forEach(entry => {
+                const logEntry = document.createElement('div');
+                logEntry.className = 'log-entry';
+                logEntry.innerHTML = entry;
+                logContainer.appendChild(logEntry);
+            });
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+    }
+
+    // 添加日志条目
+    function addLog(userId, message) {
+        if (!logs[userId]) {
+            logs[userId] = [];
+        }
+        logs[userId].push(`${new Date().toLocaleTimeString()}: ${message}`);
+        if (logs[userId].length > 100) {
+            logs[userId].shift(); // 限制日志长度
+        }
+        renderLogs();
+    }
+
+    // 获取当前用户ID
+    function getUserId() {
+        return document.getElementById('user-id').value.trim();
+    }
+
+    // 切换连接状态
+    function toggleConnect() {
+        const userId = getUserId();
+        if (!userId) return alert('请输入用户ID');
+
+        if (sockets[userId] && sockets[userId].readyState === WebSocket.OPEN) {
+            sockets[userId].close();
+            return;
+        }
+
+        const protocol = 'wss';
+        const host = window.location.host;
+
+        sockets[userId] = new WebSocket(`wss://localhost:4000/ws/task?user_id=${userId}`);
+
+        sockets[userId].onopen = () => {
+            document.getElementById('conn-btn').textContent = '断开';
+            document.getElementById('conn-status').innerHTML =
+                '<span class="status connected"></span>已连接';
+            initLogs(userId);
+            addLog(userId, `连接已建立 (用户ID: ${userId})`);
+        };
+
+        sockets[userId].onmessage = (e) => {
+            addLog(userId, `收到: ${e.data}`);
+        };
+
+        sockets[userId].onclose = () => {
+            document.getElementById('conn-btn').textContent = '连接';
+            document.getElementById('conn-status').innerHTML =
+                '<span class="status disconnected"></span>未连接';
+            addLog(userId, '连接已关闭');
+        };
+
+        sockets[userId].onerror = (e) => {
+            addLog(userId, `错误: ${e.message}`);
+        };
+    }
+
+    // 检查连接状态
+    function checkConn(userId) {
+        if (!sockets[userId] || sockets[userId].readyState !== WebSocket.OPEN) {
+            alert('请先建立连接');
+            return false;
+        }
+        return true;
+    }
+
+    // 发送私聊消息
+    function sendPrivate() {
+        const userId = getUserId();
+        if (!checkConn(userId)) return;
+
+        const target = document.getElementById('private-user').value.trim();
+        const msg = document.getElementById('private-msg').value.trim();
+
+        if (!target || !msg) return alert('请输入目标和消息');
+
+        // action:id:tag
+        sockets[userId].send(`update-task:DO-12345:pend`);// 处理中
+        // sockets[userId].send(`update-task:DO-12345:done`);// 已完结
+        // sockets[userId].send(`update-task:DO-12345:idle`);// 待接取
+        // sockets[userId].send(`search-task:DO-12345:only`);
+        // sockets[userId].send(`search-task:DO-00000:list`);
+        // sockets[userId].send(`delete-task:DO-12345:only`);
+        // sockets[userId].send(`create-task:DO-12345:only`);
+        addLog(userId, `发送私聊给 ${target}: ${msg}`);
+    }
+
+    // 发送群聊消息
+    function sendGroup() {
+        const userId = getUserId();
+        if (!checkConn(userId)) return;
+
+        const group = document.getElementById('group-id').value.trim();
+        const msg = document.getElementById('group-msg').value.trim();
+
+        if (!group || !msg) return alert('请输入群组和消息');
+
+        sockets[userId].send(JSON.stringify({
+            type: 'group',
+            group,
+            msg
+        }));
+        addLog(userId, `发送到群组 ${group}: ${msg}`);
+    }
+</script>
+</body>
+</html>

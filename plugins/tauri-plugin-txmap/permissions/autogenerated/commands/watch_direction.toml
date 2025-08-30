@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-watch-direction"
+description = "Enables the watch_direction command without any pre-configured scope."
+commands.allow = ["watch_direction"]
+
+[[permission]]
+identifier = "deny-watch-direction"
+description = "Denies the watch_direction command without any pre-configured scope."
+commands.deny = ["watch_direction"]

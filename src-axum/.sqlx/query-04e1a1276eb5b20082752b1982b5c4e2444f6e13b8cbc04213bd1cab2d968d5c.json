@@ -1,0 +1,55 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        UPDATE delivery_person\n        SET\n           money = COALESCE($2, money),\n           status = COALESCE($3, status),\n           updated_at = COALESCE($4, updated_at)\n        WHERE delivery_person_id = $1\n        RETURNING *\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "delivery_person_id",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 1,
+        "name": "money",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 2,
+        "name": "status",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "created_at",
+        "type_info": "Timestamp"
+      },
+      {
+        "ordinal": 4,
+        "name": "updated_at",
+        "type_info": "Timestamp"
+      },
+      {
+        "ordinal": 5,
+        "name": "deleted_at",
+        "type_info": "Timestamp"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int8",
+        "Numeric",
+        "Varchar",
+        "Timestamp"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "04e1a1276eb5b20082752b1982b5c4e2444f6e13b8cbc04213bd1cab2d968d5c"
+}

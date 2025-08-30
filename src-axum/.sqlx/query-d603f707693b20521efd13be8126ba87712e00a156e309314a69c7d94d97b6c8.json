@@ -1,0 +1,52 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT\n        dp.delivery_person_id as delivery_person_id,\n        dp.money as money,\n        dp.status as status,\n        dp.created_at as created_at,\n        dp.updated_at as updated_at,\n        dp.deleted_at as deleted_at\n     FROM delivery_app_user dau\n     LEFT JOIN public.delivery_person dp ON dau.delivery_person_id = dp.delivery_person_id\n     WHERE user_id = $1;",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "delivery_person_id",
+        "type_info": "Int8"
+      },
+      {
+        "ordinal": 1,
+        "name": "money",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 2,
+        "name": "status",
+        "type_info": "Varchar"
+      },
+      {
+        "ordinal": 3,
+        "name": "created_at",
+        "type_info": "Timestamp"
+      },
+      {
+        "ordinal": 4,
+        "name": "updated_at",
+        "type_info": "Timestamp"
+      },
+      {
+        "ordinal": 5,
+        "name": "deleted_at",
+        "type_info": "Timestamp"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Int8"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  "hash": "d603f707693b20521efd13be8126ba87712e00a156e309314a69c7d94d97b6c8"
+}

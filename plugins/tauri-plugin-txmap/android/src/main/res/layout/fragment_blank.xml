@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_blank"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:background="#C3C0C0"
+    android:orientation="horizontal"
+    android:clickable="false"
+    android:focusable="false"
+    tools:context=".BlankFragment">
+
+    <com.tencent.navix.api.layer.NavigatorViewStub
+        android:id="@+id/view_stub1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:travel_mode="Riding" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:clickable="true"
+        android:layout_height="wrap_content"
+        android:text="这是标题"
+        android:textSize="18sp"
+        android:textColor="#000"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="这是对话框内容区域"
+        android:layout_marginTop="8dp"/>
+
+    <Button
+        android:id="@+id/btn_ok"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="确定"
+        android:layout_marginTop="16dp"/>
+
+    <!--    <fragment-->
+    <!--        android:id="@+id/map_frag"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        class="com.tencent.tencentmap.mapsdk.maps.SupportMapFragment"/>-->
+
+
+</LinearLayout>

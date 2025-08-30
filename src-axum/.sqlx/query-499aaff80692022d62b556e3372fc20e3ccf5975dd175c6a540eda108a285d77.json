@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        INSERT INTO public.delivery_app_user (user_id, delivery_person_id)\n        VALUES ($1, $2);\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Int8",
+        "Int8"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "499aaff80692022d62b556e3372fc20e3ccf5975dd175c6a540eda108a285d77"
+}
